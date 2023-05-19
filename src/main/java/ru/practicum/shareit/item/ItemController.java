@@ -27,7 +27,7 @@ public class ItemController {
     }
 
     @GetMapping
-    public List<ItemDto> getAllItems(@RequestHeader("X-Sharer-User-Id") int userId) {
+    public List<ItemDto> getAllItemsByUserId(@RequestHeader("X-Sharer-User-Id") int userId) {
         log.info("Запрос на получение списка вещей пользователя с id = {}", userId);
         return itemService.getAllByUserId(userId);
     }

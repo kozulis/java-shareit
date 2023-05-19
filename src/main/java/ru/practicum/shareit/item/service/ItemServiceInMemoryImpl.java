@@ -30,13 +30,13 @@ public class ItemServiceInMemoryImpl implements ItemService {
     public ItemDto saveItem(int userId, ItemDto itemDto) {
         Item item = ItemMapper.toItem(itemDto);
         User user = UserMapper.toUser(userService.getById(userId));
-        item.setOwner(user);
+        item.setOwner(user.getId());
         return ItemMapper.toItemDto(itemRepository.save(item));
     }
 
     @Override
     public List<ItemDto> getAllByUserId(int userId) {
-        return itemRepository.findAllDyUserId(userId)
+        return itemRepository.findAllByUserId(userId)
                 .stream()
                 .map(ItemMapper::toItemDto)
                 .collect(Collectors.toList());
@@ -59,7 +59,7 @@ public class ItemServiceInMemoryImpl implements ItemService {
                     return new NotFoundException(String.format("Вещь с id %d не найдена", id));
                 }
         );
-        if (!Objects.equals(item.getOwner().getId(), userId)) {
+        if (!Objects.equals(item.getOwner(), userId)) {
             log.warn("Обновить вещь может только ее владелец");
             throw new NotFoundException("Обновить вещь может только ее владелец");
         }

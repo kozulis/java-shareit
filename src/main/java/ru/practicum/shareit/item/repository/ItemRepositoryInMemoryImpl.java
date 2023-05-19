@@ -28,9 +28,9 @@ public class ItemRepositoryInMemoryImpl implements ItemRepository {
     }
 
     @Override
-    public List<Item> findAllDyUserId(Integer userId) {
+    public List<Item> findAllByUserId(Integer userId) {
         return itemMap.values().stream()
-                .filter(item -> item.getOwner().getId() == userId)
+                .filter(item -> item.getOwner().equals(userId))
                 .collect(Collectors.toList());
     }
 

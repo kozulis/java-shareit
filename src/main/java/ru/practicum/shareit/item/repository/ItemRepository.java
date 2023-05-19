@@ -9,7 +9,7 @@ public interface ItemRepository {
 
     Item save(Item item);
 
-    List<Item> findAllDyUserId(Integer userId);
+    List<Item> findAllByUserId(Integer userId);
 
     Optional<Item> findById(int id);
 

@@ -1,7 +1,6 @@
 package ru.practicum.shareit.request.dto;
 
 import lombok.Data;
-import ru.practicum.shareit.user.User;
 
 import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotBlank;
@@ -19,7 +18,7 @@ public class ItemRequestDto {
     @NotBlank(message = "description не должен быть пустым")
     String description;
     @NotNull(message = "requestor не должен быть null")
-    User requestor;
+    Integer requestor;
     @FutureOrPresent(message = "created не должен быть в прошедшем времени")
     LocalDateTime created;
 
