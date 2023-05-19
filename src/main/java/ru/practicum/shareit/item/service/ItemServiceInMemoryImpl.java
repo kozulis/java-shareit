@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class ItemServiceImpl implements ItemService {
+public class ItemServiceInMemoryImpl implements ItemService {
 
     private final ItemRepository itemRepository;
     private final UserService userService;

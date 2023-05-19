@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Repository
-public class ItemRepositoryImpl implements ItemRepository {
+public class ItemRepositoryInMemoryImpl implements ItemRepository {
 
     private int count = 1;
 

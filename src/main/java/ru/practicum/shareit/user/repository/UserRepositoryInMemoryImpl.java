@@ -10,7 +10,7 @@ import java.util.*;
 
 @Repository
 @Slf4j
-public class UserRepositoryImpl implements UserRepository {
+public class UserRepositoryInMemoryImpl implements UserRepository {
 
     private int count = 1;
 
