@@ -18,7 +18,5 @@ public class ItemDto {
     private String description;
     @NotNull(message = "available не должен быть null", groups = OnCreate.class)
     private Boolean available;
-//    private User owner;
-//    private ItemRequest request;
 
 }

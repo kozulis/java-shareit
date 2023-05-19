@@ -1,5 +1,6 @@
 package ru.practicum.shareit.user.repository;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import ru.practicum.shareit.exception.AlreadyExistException;
 import ru.practicum.shareit.exception.NotFoundException;
@@ -8,6 +9,7 @@ import ru.practicum.shareit.user.User;
 import java.util.*;
 
 @Repository
+@Slf4j
 public class UserRepositoryImpl implements UserRepository {
 
     private int count = 1;
@@ -35,8 +37,11 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public User update(int id, User user) {
-        User oldUser = findById(id).orElseThrow(() ->
-                new NotFoundException(String.format("Пользователь с id %d не найден", id)));
+        User oldUser = findById(id).orElseThrow(() -> {
+                    log.warn("Пользователь с id = {} не найден", id);
+                    return new NotFoundException(String.format("Пользователь с id %d не найден", id));
+                }
+        );
         if (!oldUser.getEmail().equals(user.getEmail())) {
             checkEmail(user.getEmail());
         }
@@ -56,7 +61,10 @@ public class UserRepositoryImpl implements UserRepository {
 
     private void checkEmail(String email) {
         if (userMap.values().stream().anyMatch(user -> user.getEmail().equals(email))) {
-            throw new AlreadyExistException(String.format("Данные %s уже существуют", email));
+            log.warn("Невозможно обновить данные. " +
+                    "Пользователь с электронной почтой \"{}\" уже существует в хранилище", email);
+            throw new AlreadyExistException(
+                    String.format("Невозможно обновить данные. Данные \"%s\" уже существуют", email));
         }
     }
 }

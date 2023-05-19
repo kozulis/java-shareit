@@ -1,6 +1,7 @@
 package ru.practicum.shareit.user.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.user.User;
@@ -13,6 +14,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
@@ -30,8 +32,11 @@ public class UserServiceImpl implements UserService {
     }
 
     public UserDto getById(int id) {
-        User user = userRepository.findById(id).orElseThrow(() ->
-                new NotFoundException(String.format("Пользователь с id %d не найден", id)));
+        User user = userRepository.findById(id).orElseThrow(() -> {
+                    log.warn("Пользователь с id = {} не найден", id);
+                    return new NotFoundException(String.format("Пользователь с id %d не найден", id));
+                }
+        );
         return UserMapper.toUserDto(user);
     }
 

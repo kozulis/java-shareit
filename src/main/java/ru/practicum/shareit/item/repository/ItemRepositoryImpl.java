@@ -50,7 +50,7 @@ public class ItemRepositoryImpl implements ItemRepository {
         try {
             itemMap.remove(id);
         } catch (NotFoundException e) {
-            log.error("Объект с id {} не найден.", id);
+            log.warn("Объект с id = {} не найден.", id);
         }
     }
 
