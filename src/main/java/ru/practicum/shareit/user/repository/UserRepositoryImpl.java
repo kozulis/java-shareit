@@ -15,6 +15,15 @@ public class UserRepositoryImpl implements UserRepository {
     private final Map<Integer, User> userMap = new HashMap<>();
 
     @Override
+    public User save(User user) {
+        checkEmail(user.getEmail());
+        int id = getId(count);
+        user.setId(id);
+        userMap.put(id, user);
+        return user;
+    }
+
+    @Override
     public List<User> findAll() {
         return new ArrayList<>(userMap.values());
     }
@@ -25,19 +34,10 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public User save(User user) {
-        checkEmail(user.getEmail());
-        int id = getId(count);
-        user.setId(id);
-        userMap.put(id, user);
-        return user;
-    }
-
-    @Override
     public User update(int id, User user) {
-        User newUser = findById(id).orElseThrow(() ->
+        User oldUser = findById(id).orElseThrow(() ->
                 new NotFoundException(String.format("Пользователь с id %d не найден", id)));
-        if (!newUser.getEmail().equals(user.getEmail())) {
+        if (!oldUser.getEmail().equals(user.getEmail())) {
             checkEmail(user.getEmail());
         }
         userMap.put(id, user);

@@ -23,29 +23,32 @@ public class UserServiceImpl implements UserService {
         return UserMapper.toUserDto(user);
     }
 
-    public UserDto getById(int id) {
-        User user = userRepository.findById(id).orElseThrow(() ->
-                new NotFoundException(String.format("Пользователь с id %d не найден", id)));
-        return UserMapper.toUserDto(user);
-    }
-
     public List<UserDto> getAll() {
         return userRepository.findAll().stream()
                 .map(UserMapper::toUserDto)
                 .collect(Collectors.toList());
     }
 
-    public void delete(int id) {
-        getById(id);
-        userRepository.deleteById(id);
+    public UserDto getById(int id) {
+        User user = userRepository.findById(id).orElseThrow(() ->
+                new NotFoundException(String.format("Пользователь с id %d не найден", id)));
+        return UserMapper.toUserDto(user);
     }
 
     public UserDto updateUser(int id, UserDto userDto) {
         UserDto updatedUserDto = getById(id);
+
         Optional.ofNullable(userDto.getName()).ifPresent(updatedUserDto::setName);
         Optional.ofNullable(userDto.getEmail()).ifPresent(updatedUserDto::setEmail);
+
         User user = UserMapper.toUser(updatedUserDto);
+
         return UserMapper.toUserDto(userRepository.update(id, user));
+    }
+
+    public void delete(int id) {
+        getById(id);
+        userRepository.deleteById(id);
     }
 
 }

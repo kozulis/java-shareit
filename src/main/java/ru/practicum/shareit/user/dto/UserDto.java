@@ -13,14 +13,14 @@ import javax.validation.constraints.NotBlank;
 public class UserDto {
 
     //    @NotNull(message = "id не должен быть null")
-    int id;
+    private int id;
 
     @NotBlank(message = "email не должен быть пустым или null", groups = OnCreate.class)
-    String name;
+    private String name;
 
     @NotBlank(message = "email не должен быть пустым или null", groups = OnCreate.class)
     @Email(message = "email должен соответствовать форме адреса электронной почты",
             groups = {OnCreate.class, OnUpdate.class})
-    String email;
+    private String email;
 
 }
