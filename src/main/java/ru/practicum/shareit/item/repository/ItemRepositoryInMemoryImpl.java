@@ -57,9 +57,9 @@ public class ItemRepositoryInMemoryImpl implements ItemRepository {
     @Override
     public List<Item> search(String text) {
         return itemMap.values().stream()
-                .filter(item -> item.getName().toLowerCase().contains(text.toLowerCase()) ||
-                        item.getDescription().toLowerCase().contains(text.toLowerCase()))
-                .filter(item -> item.getAvailable().equals(true))
+                .filter(item -> item.getAvailable().equals(true) &&
+                        (item.getName().toLowerCase().contains(text.toLowerCase()) ||
+                                item.getDescription().toLowerCase().contains(text.toLowerCase())))
                 .collect(Collectors.toList());
     }
 

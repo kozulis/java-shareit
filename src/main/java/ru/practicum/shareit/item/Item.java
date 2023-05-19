@@ -11,7 +11,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class Item {
 
-    private int id;
+    private volatile int id;
     private String name;
     private String description;
     private Boolean available;
