@@ -68,7 +68,7 @@ public class ItemServiceInMemoryImpl implements ItemService {
         Optional.ofNullable(itemDto.getDescription()).ifPresent(item::setDescription);
         Optional.ofNullable(itemDto.getAvailable()).ifPresent(item::setAvailable);
 
-        return ItemMapper.toItemDto(itemRepository.update(userId, id, item));
+        return ItemMapper.toItemDto(itemRepository.update(id, item));
     }
 
     @Override

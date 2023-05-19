@@ -20,6 +20,6 @@ public class BookingDto {
     @NotNull(message = "booker не должен быть null")
     private Integer booker;
     @NotNull(message = "status не должен быть null")
-    BookingStatus status;
+    private BookingStatus status;
 
 }

@@ -40,7 +40,7 @@ public class ItemRepositoryInMemoryImpl implements ItemRepository {
     }
 
     @Override
-    public Item update(int userId, int id, Item item) {
+    public Item update(int id, Item item) {
         itemMap.put(id, item);
         return item;
     }
@@ -63,7 +63,7 @@ public class ItemRepositoryInMemoryImpl implements ItemRepository {
                 .collect(Collectors.toList());
     }
 
-    private synchronized int getId(int countId) {
+    private int getId(int countId) {
         count++;
         return countId;
     }

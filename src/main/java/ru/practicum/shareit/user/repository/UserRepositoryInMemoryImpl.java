@@ -54,7 +54,7 @@ public class UserRepositoryInMemoryImpl implements UserRepository {
         userMap.remove(id);
     }
 
-    private synchronized int getId(int countId) {
+    private int getId(int countId) {
         count++;
         return countId;
     }

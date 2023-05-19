@@ -13,7 +13,7 @@ public interface ItemRepository {
 
     Optional<Item> findById(int id);
 
-    Item update(int userId, int id, Item item);
+    Item update(int id, Item item);
 
     void deleteById(int id);
 

@@ -7,7 +7,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class User {
 
-    private volatile int id;
+    private int id;
     private String name;
     private String email;
 
