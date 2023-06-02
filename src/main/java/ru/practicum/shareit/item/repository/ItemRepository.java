@@ -5,7 +5,7 @@ import ru.practicum.shareit.item.Item;
 import java.util.List;
 import java.util.Optional;
 
-public interface ItemRepository {
+public interface ItemRepository/* extends JpaRepository<Item, Integer>*/ {
 
     Item save(Item item);
 

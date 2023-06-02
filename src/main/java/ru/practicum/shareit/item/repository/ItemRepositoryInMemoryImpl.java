@@ -30,7 +30,7 @@ public class ItemRepositoryInMemoryImpl implements ItemRepository {
     @Override
     public List<Item> findAllByUserId(Integer userId) {
         return itemMap.values().stream()
-                .filter(item -> item.getOwner().equals(userId))
+                .filter(item -> item.getOwner().getId().equals(userId))
                 .collect(Collectors.toList());
     }
 

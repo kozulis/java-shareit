@@ -9,7 +9,7 @@ import ru.practicum.shareit.item.ItemMapper;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.user.User;
-import ru.practicum.shareit.user.UserMapper;
+import ru.practicum.shareit.user.repository.UserRepository;
 import ru.practicum.shareit.user.service.UserService;
 
 import java.util.Collections;
@@ -25,12 +25,16 @@ public class ItemServiceInMemoryImpl implements ItemService {
 
     private final ItemRepository itemRepository;
     private final UserService userService;
+    private final UserRepository userRepository;
 
     @Override
     public ItemDto saveItem(int userId, ItemDto itemDto) {
-        Item item = ItemMapper.toItem(itemDto);
-        User user = UserMapper.toUser(userService.getById(userId));
-        item.setOwner(user.getId());
+        User user = userRepository.findById(userId).orElseThrow(() -> {
+                    log.warn("Пользователь с id = {} не найден", userId);
+                    return new NotFoundException(String.format("Пользователь с id %d не найден", userId));
+                }
+        );
+        Item item = ItemMapper.toItem(user, itemDto);
         return ItemMapper.toItemDto(itemRepository.save(item));
     }
 
@@ -59,11 +63,10 @@ public class ItemServiceInMemoryImpl implements ItemService {
                     return new NotFoundException(String.format("Вещь с id %d не найдена", id));
                 }
         );
-        if (!Objects.equals(item.getOwner(), userId)) {
+        if (!Objects.equals(item.getOwner().getId(), userId)) {
             log.warn("Обновить вещь может только ее владелец");
             throw new NotFoundException("Обновить вещь может только ее владелец");
         }
-
         Optional.ofNullable(itemDto.getName()).ifPresent(item::setName);
         Optional.ofNullable(itemDto.getDescription()).ifPresent(item::setDescription);
         Optional.ofNullable(itemDto.getAvailable()).ifPresent(item::setAvailable);

@@ -1,6 +1,7 @@
 package ru.practicum.shareit.request;
 
 import lombok.Data;
+import ru.practicum.shareit.user.User;
 
 import java.time.LocalDateTime;
 
@@ -11,9 +12,9 @@ import java.time.LocalDateTime;
 @Data
 public class ItemRequest {
 
-    int id;
+    Integer id;
     String description;
-    Integer requestor;
-    LocalDateTime created;
+    User requestor;
+    LocalDateTime created = LocalDateTime.now();
 
 }

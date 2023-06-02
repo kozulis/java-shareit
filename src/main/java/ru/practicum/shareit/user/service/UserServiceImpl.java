@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class UserServiceInMemoryImpl implements UserService {
+public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
@@ -48,7 +48,7 @@ public class UserServiceInMemoryImpl implements UserService {
 
         User user = UserMapper.toUser(updatedUserDto);
 
-        return UserMapper.toUserDto(userRepository.update(id, user));
+        return UserMapper.toUserDto(userRepository.save(user));
     }
 
     public void delete(int id) {
