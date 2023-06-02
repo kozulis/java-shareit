@@ -3,6 +3,7 @@ package ru.practicum.shareit.item.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.Item;
 import ru.practicum.shareit.item.ItemMapper;
@@ -10,7 +11,6 @@ import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.repository.UserRepository;
-import ru.practicum.shareit.user.service.UserService;
 
 import java.util.Collections;
 import java.util.List;
@@ -21,12 +21,13 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class ItemServiceInMemoryImpl implements ItemService {
+@Transactional(readOnly = true)
+public class ItemServiceImpl implements ItemService {
 
     private final ItemRepository itemRepository;
-    private final UserService userService;
     private final UserRepository userRepository;
 
+    @Transactional
     @Override
     public ItemDto saveItem(int userId, ItemDto itemDto) {
         User user = userRepository.findById(userId).orElseThrow(() -> {
@@ -56,6 +57,7 @@ public class ItemServiceInMemoryImpl implements ItemService {
         return ItemMapper.toItemDto(item);
     }
 
+    @Transactional
     @Override
     public ItemDto updateItem(int userId, int id, ItemDto itemDto) {
         Item item = itemRepository.findById(id).orElseThrow(() -> {
@@ -74,6 +76,7 @@ public class ItemServiceInMemoryImpl implements ItemService {
         return ItemMapper.toItemDto(itemRepository.save(item));
     }
 
+    @Transactional
     @Override
     public void deleteById(int id) {
         itemRepository.deleteById(id);

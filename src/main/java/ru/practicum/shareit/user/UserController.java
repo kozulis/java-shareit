@@ -22,32 +22,32 @@ public class UserController {
 
     @PostMapping
     public UserDto saveNewUser(@Validated(OnCreate.class) @RequestBody UserDto userDto) {
-        log.debug("Запрос на создание нового пользователя");
+        log.info("Запрос на создание нового пользователя");
         return userService.saveUser(userDto);
     }
 
     @GetMapping
     public List<UserDto> getAllUsers() {
-        log.debug("Запрос на получение списков пользователей");
+        log.info("Запрос на получение списков пользователей");
         return userService.getAll();
     }
 
     @GetMapping("/{userId}")
     public UserDto getUser(@PathVariable("userId") int id) {
-        log.debug("Запрос на получение пользователя c id = {}", id);
+        log.info("Запрос на получение пользователя c id = {}", id);
         return userService.getById(id);
     }
 
     @PatchMapping("/{userId}")
     public UserDto updateUser(@PathVariable("userId") int id, @Validated(OnUpdate.class)
     @RequestBody UserDto userDto) {
-        log.debug("Запрос на обновление данных пользователя c id = {}", id);
+        log.info("Запрос на обновление данных пользователя c id = {}", id);
         return userService.updateUser(id, userDto);
     }
 
     @DeleteMapping("/{userId}")
     public void deleteUser(@PathVariable("userId") int id) {
-        log.debug("Запрос на удаление пользователя");
+        log.info("Запрос на удаление пользователя");
         userService.delete(id);
     }
 

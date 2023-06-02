@@ -4,11 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.practicum.shareit.validation.OnCreate;
 
-import javax.validation.constraints.Future;
 import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Data
@@ -19,19 +18,18 @@ public class BookingDto {
 
     private Integer id;
 
-    @NotEmpty
+    @NotEmpty(message = "дата бронирования не должна быть пустой", groups = OnCreate.class)
     @FutureOrPresent(message = "дата бронирования не должен быть в прошедшем времени")
     private LocalDateTime start;
 
-    @NotEmpty
-    @Future(message = "дата окончания бронирования не должен быть в прошедшем времени")
+    @NotEmpty(message = "дата окончания бронирования не должна быть пустой", groups = OnCreate.class)
+    @FutureOrPresent(message = "дата окончания бронирования не должен быть в прошедшем времени")
     private LocalDateTime end;
 
-    @NotNull(message = "item не должен быть null")
-    private Integer item;
+    @NotEmpty(message = "item не должен быть пустой", groups = OnCreate.class)
+    private Integer itemId;
 
-    @NotNull(message = "booker не должен быть null")
-    private Integer booker;
+    private Integer bookerId;
 
     private String status;
 
