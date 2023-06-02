@@ -40,7 +40,7 @@ public class ItemServiceInMemoryImpl implements ItemService {
 
     @Override
     public List<ItemDto> getAllByUserId(int userId) {
-        return itemRepository.findAllByUserId(userId)
+        return itemRepository.findAllByOwnerId(userId)
                 .stream()
                 .map(ItemMapper::toItemDto)
                 .collect(Collectors.toList());
@@ -71,7 +71,7 @@ public class ItemServiceInMemoryImpl implements ItemService {
         Optional.ofNullable(itemDto.getDescription()).ifPresent(item::setDescription);
         Optional.ofNullable(itemDto.getAvailable()).ifPresent(item::setAvailable);
 
-        return ItemMapper.toItemDto(itemRepository.update(id, item));
+        return ItemMapper.toItemDto(itemRepository.save(item));
     }
 
     @Override
