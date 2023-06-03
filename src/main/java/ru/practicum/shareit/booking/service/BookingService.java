@@ -9,7 +9,7 @@ public interface BookingService {
 
     BookingResponseDto saveBooking(int userId, BookingDto bookingDto);
 
-    BookingResponseDto updateBooking(int userId, Integer bookingId, Boolean approved);
+    BookingResponseDto approveBooking(int userId, Integer bookingId, Boolean approved);
 
     BookingResponseDto getById(int userId, Integer bookingId);
 
