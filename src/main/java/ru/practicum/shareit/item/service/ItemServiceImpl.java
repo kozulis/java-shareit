@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.shareit.booking.Booking;
+import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.Item;
 import ru.practicum.shareit.item.ItemMapper;
@@ -26,10 +28,11 @@ public class ItemServiceImpl implements ItemService {
 
     private final ItemRepository itemRepository;
     private final UserRepository userRepository;
+    private final BookingRepository bookingRepository;
 
     @Transactional
     @Override
-    public ItemDto saveItem(int userId, ItemDto itemDto) {
+    public ItemDto saveItem(Integer userId, ItemDto itemDto) {
         User user = userRepository.findById(userId).orElseThrow(() -> {
                     log.warn("Пользователь с id = {} не найден", userId);
                     return new NotFoundException(String.format("Пользователь с id %d не найден", userId));
@@ -40,26 +43,37 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<ItemDto> getAllByUserId(int userId) {
-        return itemRepository.findAllByOwnerId(userId)
+    public List<ItemDto> getAllByUserId(Integer userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> {
+                    log.warn("Пользователь с id = {} не найден", userId);
+                    return new NotFoundException(String.format("Пользователь с id %d не найден", userId));
+                }
+        );
+        List<Item> userItems = itemRepository.findByOwner(user);
+        return userItems
                 .stream()
-                .map(ItemMapper::toItemDto)
+                .map(item -> ItemMapper.toItemDto(item, bookingRepository.findByItem(item)))
+                .sorted(this::compareDates)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public ItemDto getById(int userId, int id) {
+    public ItemDto getById(Integer userId, Integer id) {
         Item item = itemRepository.findById(id).orElseThrow(() -> {
                     log.warn("Вещь с id = {} не найдена", id);
                     return new NotFoundException(String.format("Вещь с id %d не найдена", id));
                 }
         );
+        List<Booking> bookings = bookingRepository.findByItem(item);
+        if (item.getOwner().getId().equals(userId)) {
+            return ItemMapper.toItemDto(item, bookings);
+        }
         return ItemMapper.toItemDto(item);
     }
 
     @Transactional
     @Override
-    public ItemDto updateItem(int userId, int id, ItemDto itemDto) {
+    public ItemDto updateItem(Integer userId, Integer id, ItemDto itemDto) {
         Item item = itemRepository.findById(id).orElseThrow(() -> {
                     log.warn("Вещь с id = {} не найдена", id);
                     return new NotFoundException(String.format("Вещь с id %d не найдена", id));
@@ -78,12 +92,12 @@ public class ItemServiceImpl implements ItemService {
 
     @Transactional
     @Override
-    public void deleteById(int id) {
+    public void deleteById(Integer id) {
         itemRepository.deleteById(id);
     }
 
     @Override
-    public List<ItemDto> searchItem(int userId, String text) {
+    public List<ItemDto> searchItem(Integer userId, String text) {
         if (text == null || text.isBlank()) {
             return Collections.emptyList();
         }
@@ -92,4 +106,12 @@ public class ItemServiceImpl implements ItemService {
                 .map(ItemMapper::toItemDto)
                 .collect(Collectors.toList());
     }
+
+    private int compareDates(ItemDto itemDto1, ItemDto itemDto2) {
+        if (itemDto1.getNextBooking() == null && itemDto2.getNextBooking() == null) return 0;
+        if (itemDto1.getNextBooking() == null) return 1;
+        if (itemDto2.getNextBooking() == null) return -1;
+        return -itemDto1.getNextBooking().getStart().compareTo(itemDto2.getNextBooking().getStart());
+    }
+
 }

@@ -6,16 +6,16 @@ import java.util.List;
 
 public interface ItemService {
 
-    ItemDto saveItem(int userId, ItemDto itemDto);
+    ItemDto saveItem(Integer userId, ItemDto itemDto);
 
-    List<ItemDto> getAllByUserId(int userId);
+    List<ItemDto> getAllByUserId(Integer userId);
 
-    ItemDto getById(int userId, int id);
+    ItemDto getById(Integer userId, Integer id);
 
-    ItemDto updateItem(int userId, int id, ItemDto itemDto);
+    ItemDto updateItem(Integer userId, Integer id, ItemDto itemDto);
 
-    void deleteById(int id);
+    void deleteById(Integer id);
 
-    List<ItemDto> searchItem(int userId, String text);
+    List<ItemDto> searchItem(Integer userId, String text);
 
 }
