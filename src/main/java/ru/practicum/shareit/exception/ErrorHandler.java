@@ -41,6 +41,13 @@ public class ErrorHandler {
         log.warn("Ошибка валидации.");
         return new ErrorResponse("Данные уже существуют", e.getMessage());
     }
+
+    @ExceptionHandler(UnknownBookingStateException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleUnknownBookingStateException(final UnknownBookingStateException e) {
+        log.warn("Неизвестные параметры запроса.");
+        return new ErrorResponse(e.getMessage());
+    }
 //
 //    @ExceptionHandler
 //    @ResponseStatus(HttpStatus.BAD_REQUEST)
