@@ -31,6 +31,7 @@ public class CommentServiceImpl implements CommentService {
     private final BookingRepository bookingRepository;
 
     @Override
+    @Transactional
     public CommentDto saveComment(Integer userId, Integer itemId, CommentDto commentDto) {
         User author = userRepository.findById(userId).orElseThrow(() -> {
                     log.warn("Пользователь с id = {} не найден", userId);
