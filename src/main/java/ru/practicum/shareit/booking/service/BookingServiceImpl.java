@@ -163,7 +163,7 @@ public class BookingServiceImpl implements BookingService {
                         booking.getEnd().isAfter(now));
                 break;
             case PAST:
-                bookingStream = bookingStream.filter(booking -> booking.getEnd().isAfter(now));
+                bookingStream = bookingStream.filter(booking -> booking.getEnd().isBefore(now));
                 break;
             case FUTURE:
                 bookingStream = bookingStream.filter(booking -> booking.getStart().isAfter(now));

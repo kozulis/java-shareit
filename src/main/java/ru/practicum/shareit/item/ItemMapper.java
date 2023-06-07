@@ -4,11 +4,13 @@ import lombok.experimental.UtilityClass;
 import ru.practicum.shareit.booking.Booking;
 import ru.practicum.shareit.booking.BookingMapper;
 import ru.practicum.shareit.booking.BookingStatus;
+import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.user.User;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @UtilityClass
 public class ItemMapper {
@@ -22,8 +24,23 @@ public class ItemMapper {
                 .build();
     }
 
-    public static ItemDto toItemDto(Item item, List<Booking> bookings) {
-        ItemDto itemDto = toItemDto(item);
+    public static ItemDto toItemDto(Item item, List<Comment> comments) {
+        List<CommentDto> commentDtos = comments
+                .stream()
+                .map(CommentMapper::toCommentDto)
+                .collect(Collectors.toList());
+
+        return ItemDto.builder()
+                .id(item.getId())
+                .name(item.getName())
+                .description(item.getDescription())
+                .available(item.getAvailable())
+                .comments(commentDtos)
+                .build();
+    }
+
+    public static ItemDto toItemDto(Item item, List<Comment> comments, List<Booking> bookings) {
+        ItemDto itemDto = toItemDto(item, comments);
         LocalDateTime now = LocalDateTime.now();
 
         for (Booking booking : bookings) {

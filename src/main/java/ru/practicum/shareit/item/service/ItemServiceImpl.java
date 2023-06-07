@@ -7,9 +7,11 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.Booking;
 import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.exception.NotFoundException;
+import ru.practicum.shareit.item.Comment;
 import ru.practicum.shareit.item.Item;
 import ru.practicum.shareit.item.ItemMapper;
 import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.repository.CommentRepository;
 import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.repository.UserRepository;
@@ -29,6 +31,7 @@ public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
     private final UserRepository userRepository;
     private final BookingRepository bookingRepository;
+    private final CommentRepository commentRepository;
 
     @Transactional
     @Override
@@ -52,7 +55,8 @@ public class ItemServiceImpl implements ItemService {
         List<Item> userItems = itemRepository.findByOwner(user);
         return userItems
                 .stream()
-                .map(item -> ItemMapper.toItemDto(item, bookingRepository.findByItem(item)))
+                .map(item -> ItemMapper.toItemDto(item, commentRepository.findByItemOrderByIdAsc(item),
+                        bookingRepository.findByItem(item)))
                 .sorted(this::compareDates)
                 .collect(Collectors.toList());
     }
@@ -65,10 +69,11 @@ public class ItemServiceImpl implements ItemService {
                 }
         );
         List<Booking> bookings = bookingRepository.findByItem(item);
+        List<Comment> comments = commentRepository.findByItemOrderByIdAsc(item);
         if (item.getOwner().getId().equals(userId)) {
-            return ItemMapper.toItemDto(item, bookings);
+            return ItemMapper.toItemDto(item, comments, bookings);
         }
-        return ItemMapper.toItemDto(item);
+        return ItemMapper.toItemDto(item, comments);
     }
 
     @Transactional
