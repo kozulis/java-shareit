@@ -20,7 +20,7 @@ public class CommentDto {
     @NotBlank(message = "Поле 'text' не должно быть пустым", groups = OnCreate.class)
     private String text;
 
-    private ItemDto item;
+    private Integer itemId;
 
     private String authorName;
 

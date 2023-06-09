@@ -4,6 +4,7 @@ import lombok.experimental.UtilityClass;
 import ru.practicum.shareit.booking.Booking;
 import ru.practicum.shareit.booking.BookingMapper;
 import ru.practicum.shareit.booking.BookingStatus;
+import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.user.User;
@@ -56,6 +57,18 @@ public class ItemMapper {
             }
         }
         return itemDto;
+    }
+
+    public static ItemDto toItemDto(Item item, BookingDto last, BookingDto next, List<CommentDto> comments) {
+        return ItemDto.builder()
+                .id(item.getId())
+                .name(item.getName())
+                .description(item.getDescription())
+                .available(item.getAvailable())
+                .lastBooking(last)
+                .nextBooking(next)
+                .comments(comments)
+                .build();
     }
 
     public static Item toItem(User user, ItemDto itemDto) {

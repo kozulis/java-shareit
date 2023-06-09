@@ -28,7 +28,7 @@ public class ErrorHandler {
         return new ErrorResponse("Ошибка валидации.", e.getMessage());
     }
 
-    @ExceptionHandler(Throwable.class)
+    @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse handleThrowableException(final Throwable e) {
         log.error("Непредвиденная ошибка.");
@@ -48,11 +48,5 @@ public class ErrorHandler {
         log.warn("Неизвестные параметры запроса.");
         return new ErrorResponse(e.getMessage());
     }
-//
-//    @ExceptionHandler
-//    @ResponseStatus(HttpStatus.BAD_REQUEST)
-//    public ErrorResponse handleMethodArgumentNotValidException(final MethodArgumentNotValidException e) {
-//        log.warn("Ошибка валидации.");
-//        return new ErrorResponse("Ошибка валидации.", e.getMessage());
-//    }
+
 }

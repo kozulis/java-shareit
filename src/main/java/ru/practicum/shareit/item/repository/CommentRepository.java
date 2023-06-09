@@ -10,4 +10,6 @@ public interface CommentRepository extends JpaRepository<Comment, Integer> {
 
     List<Comment> findByItemOrderByIdAsc(Item item);
 
+    List<Comment> findByItemIn(List<Item> items);
+
 }

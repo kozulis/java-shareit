@@ -149,7 +149,7 @@ public class BookingServiceImpl implements BookingService {
     private BookingState getBookingState(String state) {
         try {
             return BookingState.valueOf(state);
-        } catch (Throwable e) {
+        } catch (Exception e) {
             throw new UnknownBookingStateException(String.format("Unknown state: %s", state));
         }
     }
