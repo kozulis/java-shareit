@@ -7,42 +7,46 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import javax.validation.ConstraintViolationException;
+
 @Slf4j
 @RestControllerAdvice
 public class ErrorHandler {
 
-    @ExceptionHandler
+    @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleNotFoundException(final NotFoundException e) {
-        log.error("Данные не обнаружены.");
+        log.warn("Данные не обнаружены.");
         return new ErrorResponse("Данные не обнаружены.", e.getMessage());
     }
 
-    @ExceptionHandler
+    @ExceptionHandler({ValidationException.class, MethodArgumentNotValidException.class,
+            ConstraintViolationException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleValidationException(final ValidationException e) {
-        log.error("Ошибка валидации.");
+        log.warn("Ошибка валидации.");
         return new ErrorResponse("Ошибка валидации.", e.getMessage());
     }
 
-    @ExceptionHandler
+    @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse handleThrowableException(final Throwable e) {
         log.error("Непредвиденная ошибка.");
         return new ErrorResponse("Непредвиденная ошибка.", e.getMessage());
     }
 
-    @ExceptionHandler
+    @ExceptionHandler(AlreadyExistException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
     public ErrorResponse handleAlreadyExistException(final AlreadyExistException e) {
-        log.error("Ошибка валидации.");
+        log.warn("Ошибка валидации.");
         return new ErrorResponse("Данные уже существуют", e.getMessage());
     }
 
-    @ExceptionHandler
+    @ExceptionHandler(UnknownBookingStateException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleMethodArgumentNotValidException(final MethodArgumentNotValidException e) {
-        log.error("Ошибка валидации.");
-        return new ErrorResponse("Ошибка валидации.", e.getMessage());
+    public ErrorResponse handleUnknownBookingStateException(final UnknownBookingStateException e) {
+        log.warn("Неизвестные параметры запроса.");
+        return new ErrorResponse(e.getMessage());
     }
+
 }

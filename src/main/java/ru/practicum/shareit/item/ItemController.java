@@ -4,7 +4,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.service.CommentService;
 import ru.practicum.shareit.item.service.ItemService;
 import ru.practicum.shareit.validation.OnCreate;
 
@@ -18,6 +20,7 @@ import java.util.List;
 public class ItemController {
 
     private final ItemService itemService;
+    private final CommentService commentService;
 
     @PostMapping
     public ItemDto saveNewItem(@RequestHeader("X-Sharer-User-Id") int userId,
@@ -58,5 +61,14 @@ public class ItemController {
         log.info("Запрос на поиск вещи по названию или описанию, текст = \"{}\"", text);
         return itemService.searchItem(userId, text);
     }
+
+    @PostMapping("/{itemId}/comment")
+    public CommentDto saveNewComment(@RequestHeader("X-Sharer-User-Id") int userId,
+                                     @PathVariable("itemId") int id,
+                                     @Validated(OnCreate.class) @RequestBody CommentDto commentDto) {
+        log.info("Запрос на добавление комментария к вещи c id = {} от пользователя с id = {}", id, userId);
+        return commentService.saveComment(userId, id, commentDto);
+    }
+
 
 }
