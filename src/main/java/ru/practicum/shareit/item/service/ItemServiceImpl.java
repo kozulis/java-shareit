@@ -4,13 +4,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.shareit.booking.Booking;
 import ru.practicum.shareit.booking.BookingMapper;
 import ru.practicum.shareit.booking.BookingStatus;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.exception.NotFoundException;
-import ru.practicum.shareit.item.Comment;
 import ru.practicum.shareit.item.CommentMapper;
 import ru.practicum.shareit.item.Item;
 import ru.practicum.shareit.item.ItemMapper;
@@ -87,10 +85,24 @@ public class ItemServiceImpl implements ItemService {
                     return new NotFoundException(String.format("Вещь с id %d не найдена", id));
                 }
         );
-        List<Booking> bookings = bookingRepository.findByItem(item);
-        List<Comment> comments = commentRepository.findByItemOrderByIdAsc(item);
+        List<BookingDto> bookings = bookingRepository.findAllByItemAndStatusOrderByStartAsc(item,
+                        BookingStatus.APPROVED)
+                .stream()
+                .map(BookingMapper::toBookingDto)
+                .collect(toList());
+
+        List<CommentDto> comments = commentRepository.findByItemOrderByIdAsc(item)
+                .stream()
+                .map(CommentMapper::toCommentDto)
+                .collect(toList());
+
         if (item.getOwner().getId().equals(userId)) {
-            return ItemMapper.toItemDto(item, comments, bookings);
+            return ItemMapper.toItemDto(
+                    item,
+                    getLastBooking(bookings),
+                    getNextBooking(bookings),
+                    comments
+            );
         }
         return ItemMapper.toItemDto(item, comments);
     }
@@ -103,10 +115,12 @@ public class ItemServiceImpl implements ItemService {
                     return new NotFoundException(String.format("Вещь с id %d не найдена", id));
                 }
         );
+
         if (!Objects.equals(item.getOwner().getId(), userId)) {
             log.warn("Обновить вещь может только ее владелец");
             throw new NotFoundException("Обновить вещь может только ее владелец");
         }
+
         Optional.ofNullable(itemDto.getName()).ifPresent(item::setName);
         Optional.ofNullable(itemDto.getDescription()).ifPresent(item::setDescription);
         Optional.ofNullable(itemDto.getAvailable()).ifPresent(item::setAvailable);
@@ -125,6 +139,7 @@ public class ItemServiceImpl implements ItemService {
         if (text == null || text.isBlank()) {
             return Collections.emptyList();
         }
+
         return itemRepository.search(text)
                 .stream()
                 .map(ItemMapper::toItemDto)
@@ -135,6 +150,7 @@ public class ItemServiceImpl implements ItemService {
         if (bookings == null || bookings.isEmpty()) {
             return null;
         }
+
         return bookings
                 .stream()
                 .filter(bookingDto -> bookingDto.getStart().isBefore(LocalDateTime.now()))
@@ -146,6 +162,7 @@ public class ItemServiceImpl implements ItemService {
         if (bookings == null || bookings.isEmpty()) {
             return null;
         }
+
         return bookings
                 .stream()
                 .filter(bookingDto -> bookingDto.getStart().isAfter(LocalDateTime.now()))
