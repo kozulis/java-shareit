@@ -2,6 +2,8 @@ package ru.practicum.shareit.booking.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.Booking;
@@ -113,13 +115,14 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public List<BookingResponseDto> getByUser(Integer userId, String state) {
+    public List<BookingResponseDto> getByUser(Integer userId, String state, Integer from, Integer size) {
         User user = userRepository.findById(userId).orElseThrow(() -> {
                     log.warn("Пользователь с id = {} не найден", userId);
                     return new NotFoundException(String.format("Пользователь с id = %d не найден", userId));
                 }
         );
-        List<Booking> userBookings = bookingRepository.findByBooker(user);
+        PageRequest page = PageRequest.of(from / size, size, Sort.by("start").descending());
+        List<Booking> userBookings = bookingRepository.findByBooker(user, page);
         BookingState bookingState = getBookingState(state);
 
         return getBookingByState(userBookings, bookingState)
@@ -129,14 +132,14 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public List<BookingResponseDto> getByItemsOwner(Integer userId, String state) {
+    public List<BookingResponseDto> getByItemsOwner(Integer userId, String state, Integer from, Integer size) {
         User user = userRepository.findById(userId).orElseThrow(() -> {
                     log.warn("Пользователь с id = {} не найден", userId);
                     return new NotFoundException(String.format("Пользователь с id = %d не найден", userId));
                 }
         );
-
-        List<Booking> itemOwnerBookings = bookingRepository.findByItem_Owner(user);
+        PageRequest page = PageRequest.of(from / size, size, Sort.by("start").descending());
+        List<Booking> itemOwnerBookings = bookingRepository.findByItem_Owner(user, page);
         BookingState bookingState = getBookingState(state);
 
         return getBookingByState(itemOwnerBookings, bookingState)

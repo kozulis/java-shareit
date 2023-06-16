@@ -2,6 +2,7 @@ package ru.practicum.shareit.item.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.BookingMapper;
@@ -36,7 +37,6 @@ public class ItemServiceImpl implements ItemService {
     private final UserRepository userRepository;
     private final BookingRepository bookingRepository;
     private final CommentRepository commentRepository;
-    private final ItemRequestRepository itemRequestRepository;
 
     @Transactional
     @Override
@@ -47,22 +47,18 @@ public class ItemServiceImpl implements ItemService {
                 }
         );
         Item item = ItemMapper.toItem(user, itemDto);
-        //TODO проверить работу блока if
-        if (item.getRequestId() != null) {
-            itemRequestRepository.findById(item.getRequestId()).orElseThrow(() ->
-                    new NotFoundException(String.format("Запрос с id = %d не найден", item.getRequestId())));
-        }
         return ItemMapper.toItemDto(itemRepository.save(item));
     }
 
     @Override
-    public List<ItemDto> getAllByUserId(Integer userId) {
+    public List<ItemDto> getAllByUserId(Integer userId, Integer from, Integer size) {
         userRepository.findById(userId).orElseThrow(() -> {
                     log.warn("Пользователь с id = {} не найден", userId);
                     return new NotFoundException(String.format("Пользователь с id %d не найден", userId));
                 }
         );
-        List<Item> userItems = itemRepository.findAllByOwnerId(userId);
+        PageRequest page = PageRequest.of(from / size, size);
+        List<Item> userItems = itemRepository.findAllByOwnerId(userId, page);
 
         Map<Integer, List<CommentDto>> comments = commentRepository.findByItemIn(userItems)
                 .stream()
@@ -142,12 +138,12 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<ItemDto> searchItem(Integer userId, String text) {
+    public List<ItemDto> searchItem(Integer userId, String text, Integer from, Integer size) {
         if (text == null || text.isBlank()) {
             return Collections.emptyList();
         }
-
-        return itemRepository.search(text)
+        PageRequest page = PageRequest.of(from / size, size);
+        return itemRepository.search(text, page)
                 .stream()
                 .map(ItemMapper::toItemDto)
                 .collect(toList());

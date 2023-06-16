@@ -8,7 +8,7 @@ public interface ItemService {
 
     ItemDto saveItem(Integer userId, ItemDto itemDto);
 
-    List<ItemDto> getAllByUserId(Integer userId);
+    List<ItemDto> getAllByUserId(Integer userId, Integer from, Integer size);
 
     ItemDto getById(Integer userId, Integer id);
 
@@ -16,6 +16,6 @@ public interface ItemService {
 
     void deleteById(Integer id);
 
-    List<ItemDto> searchItem(Integer userId, String text);
+    List<ItemDto> searchItem(Integer userId, String text, Integer from, Integer size);
 
 }

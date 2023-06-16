@@ -4,11 +4,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.service.ItemRequestService;
 import ru.practicum.shareit.validation.OnCreate;
 
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
 @RestController
@@ -28,22 +29,21 @@ public class ItemRequestController {
         return itemRequestService.saveItemRequest(userId, itemRequestDto);
     }
 
-    // Запросы сортируются по дате создания: от более новых к более старым
     @GetMapping
     public List<ItemRequestDto> getOwnRequests(@RequestHeader("X-Sharer-User-Id") Integer userId) {
         log.info("Получение списка собственных запросов пользователя с id = {}", userId);
         return itemRequestService.getOwnRequests(userId);
     }
 
-    // Запросы сортируются по дате создания: от более новых к более старым
     @GetMapping("/all")
     public List<ItemRequestDto> getAllRequests(@RequestHeader("X-Sharer-User-Id") Integer userId,
-                                               @RequestParam(defaultValue = "0") Integer from,
-                                               @RequestParam(defaultValue = "10") Integer size) {
+                                               @RequestParam(defaultValue = "0")
+                                               @PositiveOrZero(message = "Параметр 'from' должен быть больше 0")
+                                               Integer from,
+                                               @RequestParam(defaultValue = "10")
+                                               @Positive(message = "Параметр 'size' должен быть больше 0")
+                                               Integer size) {
         log.info("Получение списка запросов других пользователей");
-        if (from < 0) {
-            throw new ValidationException("Параметр \"from\" не должен быть меньше 0");
-        }
         return itemRequestService.getAllRequests(userId, from, size);
     }
 
