@@ -1,26 +1,33 @@
 package ru.practicum.shareit.request.dto;
 
-import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import lombok.experimental.FieldDefaults;
+import lombok.NoArgsConstructor;
+import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.validation.OnCreate;
 
 import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
+import java.util.Set;
 
 @Data
-@FieldDefaults(level = AccessLevel.PRIVATE)
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class ItemRequestDto {
 
-    Integer id;
+    private Integer id;
 
-    @NotBlank(message = "description не должен быть пустым")
-    String description;
+    @NotBlank(message = "description не должен быть пустым", groups = OnCreate.class)
+    private String description;
 
-    @NotNull(message = "requestor не должен быть null")
-    Integer requestor;
+    private Integer requestorId;
 
     @FutureOrPresent(message = "created не должен быть в прошедшем времени")
-    String created;
+    private LocalDateTime created;
+
+    private Set<ItemDto> items;
 
 }
