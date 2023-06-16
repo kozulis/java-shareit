@@ -1,9 +1,10 @@
-package ru.practicum.shareit.request;
+package ru.practicum.shareit.request.service;
 
 import lombok.experimental.UtilityClass;
-import ru.practicum.shareit.item.ItemMapper;
+import ru.practicum.shareit.item.service.ItemMapper;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
-import ru.practicum.shareit.user.User;
+import ru.practicum.shareit.request.model.ItemRequest;
+import ru.practicum.shareit.user.model.User;
 
 import java.time.LocalDateTime;
 import java.util.List;
