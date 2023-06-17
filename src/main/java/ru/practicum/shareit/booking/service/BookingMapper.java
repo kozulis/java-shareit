@@ -31,7 +31,7 @@ public class BookingMapper {
                 .end(booking.getEnd())
                 .itemId(booking.getItem().getId())
                 .bookerId(booking.getBooker().getId())
-                .status(booking.getStatus().toString())
+                .status(booking.getStatus())
                 .build();
     }
 

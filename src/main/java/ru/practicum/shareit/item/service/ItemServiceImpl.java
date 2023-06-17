@@ -92,7 +92,7 @@ public class ItemServiceImpl implements ItemService {
                     return new NotFoundException(String.format("Вещь с id %d не найдена", id));
                 }
         );
-        List<BookingDto> bookings = bookingRepository.findAllByItemAndStatusOrderByStartAsc(item,
+        List<BookingDto> bookings = bookingRepository.findAllByItemInAndStatusOrderByStartAsc(List.of(item),
                         BookingStatus.APPROVED)
                 .stream()
                 .map(BookingMapper::toBookingDto)
