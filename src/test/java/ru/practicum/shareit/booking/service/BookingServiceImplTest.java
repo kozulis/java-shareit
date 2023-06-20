@@ -44,7 +44,7 @@ class BookingServiceImplTest {
 
     LocalDateTime now = LocalDateTime.now();
 
-    private final User booker = User.builder().id(1).name("user").email("user@user.com").build();
+    private final User booker = User.builder().id(1).name("booker").email("booker@user.com").build();
     private final User owner = User.builder().id(2).name("owner").email("owner@user.com").build();
     private final Item item = Item.builder().id(3).name("itemName").description("itemDescription").available(true)
             .owner(owner).requestId(1).build();
@@ -150,6 +150,16 @@ class BookingServiceImplTest {
     }
 
     @Test
+    void approveBooking_whenWrongBookingId_thanNotFoundExceptionThrown() {
+        when(bookingRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        assertThrows(NotFoundException.class, () -> bookingService.approveBooking(booking.getId(),
+                booking.getId(), true));
+        verify(bookingRepository, times(1)).findById(any());
+        verify(bookingRepository, never()).save(any());
+    }
+
+    @Test
     void approveBooking_whenBookingStatusSwitchToRejected_thanReturnApprove() {
         Integer bookerId = booking.getItem().getOwner().getId();
         when(bookingRepository.findById(anyInt())).thenReturn(Optional.of(booking));
@@ -161,18 +171,6 @@ class BookingServiceImplTest {
         assertEquals(actualBookingResponseDto.getStatus(), BookingStatus.REJECTED);
         verify(bookingRepository, times(1)).findById(any());
         verify(bookingRepository, times(1)).save(any());
-    }
-
-    @Test
-    void approveBooking_whenWrongBookingId_thanNotFoundExceptionThrown() {
-        Integer wrongBookingId = 5;
-
-        when(bookingRepository.findById(anyInt())).thenThrow(NotFoundException.class);
-
-        assertThrows(NotFoundException.class, () -> bookingService.approveBooking(wrongBookingId,
-                booking.getId(), true));
-        verify(bookingRepository, times(1)).findById(any());
-        verify(bookingRepository, never()).save(any());
     }
 
     @Test
@@ -213,11 +211,10 @@ class BookingServiceImplTest {
     }
 
     @Test
-    void getById_whenUserFound_thanNotFoundExceptionThrown() {
-        Integer bookerId = booking.getItem().getOwner().getId();
-        when(bookingRepository.findById(booking.getId())).thenThrow(NotFoundException.class);
+    void getById_whenBookerFound_thanNotFoundExceptionThrown() {
+        when(bookingRepository.findById(booking.getId())).thenReturn(Optional.empty());
 
-        assertThrows(NotFoundException.class, () -> bookingService.getById(bookerId, booking.getId()));
+        assertThrows(NotFoundException.class, () -> bookingService.getById(booker.getId(), booking.getId()));
 
         verify(bookingRepository, times(1)).findById(anyInt());
     }
@@ -251,7 +248,7 @@ class BookingServiceImplTest {
 
     @Test
     void getByUser_whenBookerNotFound_thanNotFoundExceptionThrown() {
-        when(userRepository.findById(anyInt())).thenThrow(NotFoundException.class);
+        when(userRepository.findById(anyInt())).thenReturn(Optional.empty());
 
         assertThrows(NotFoundException.class, () -> bookingService.getByUser(booker.getId(), "ALL", 0, 10));
 
@@ -276,7 +273,7 @@ class BookingServiceImplTest {
 
     @Test
     void getByItemsOwner_whenItemOwnerNotFound_thanNotFoundExceptionThrown() {
-        when(userRepository.findById(anyInt())).thenThrow(NotFoundException.class);
+        when(userRepository.findById(anyInt())).thenReturn(Optional.empty());
 
         assertThrows(NotFoundException.class, () -> bookingService.getByItemsOwner(owner.getId(), "ALL", 0, 10));
 
