@@ -1,6 +1,7 @@
 package ru.practicum.shareit.request.service;
 
 import lombok.RequiredArgsConstructor;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,6 +28,7 @@ class ItemRequestServiceIntTest {
     private final ItemRequestDto itemRequestDto = ItemRequestDto.builder().description("Нужна панталоны").build();
 
     @Test
+    @DisplayName("Получение списка собственных запросов")
     void getOwnRequests() {
         UserDto savedRequestorDto = userService.saveUser(requestorDto);
         ItemRequestDto savedItemRequestDto = itemRequestService.saveItemRequest(savedRequestorDto.getId(), itemRequestDto);

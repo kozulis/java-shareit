@@ -1,5 +1,6 @@
 package ru.practicum.shareit.request.service;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -42,6 +43,7 @@ class ItemRequestServiceImplTest {
 
 
     @Test
+    @DisplayName("Добавление запроса на вещь")
     void saveItemRequest_ReturnItemRequest() {
         when(userRepository.findById(anyInt())).thenReturn(Optional.of(requestor));
         when(itemRequestRepository.save(any(ItemRequest.class))).thenReturn(itemRequest);
@@ -55,6 +57,7 @@ class ItemRequestServiceImplTest {
     }
 
     @Test
+    @DisplayName("Ошибка добавления запроса на вещь, если пользователь не найден")
     void saveItemRequest_whenUserNotFound_thanNotFoundExceptionThrown() {
         when(userRepository.findById(anyInt())).thenReturn(Optional.empty());
 
@@ -64,6 +67,7 @@ class ItemRequestServiceImplTest {
     }
 
     @Test
+    @DisplayName("Получение списка собственных запросов")
     void getOwnRequests_ReturnItemRequest() {
         when(userRepository.findById(anyInt())).thenReturn(Optional.of(requestor));
         when(itemRequestRepository.findAllByRequestorOrderByCreatedDesc(any(User.class)))
@@ -78,6 +82,7 @@ class ItemRequestServiceImplTest {
     }
 
     @Test
+    @DisplayName("Ошибка получения списка собственных запросов, если пользователь не найден")
     void getOwnRequests_whenUserNotFound_thanNotFoundExceptionThrown() {
         when(userRepository.findById(anyInt())).thenReturn(Optional.empty());
 
@@ -87,6 +92,7 @@ class ItemRequestServiceImplTest {
     }
 
     @Test
+    @DisplayName("Получение списка всех запросов")
     void getAllRequests_ReturnItemRequests() {
         when(userRepository.findById(anyInt())).thenReturn(Optional.of(owner));
         when(itemRequestRepository.findAll(any(PageRequest.class))).thenReturn(new PageImpl<>(List.of(itemRequest)));
@@ -100,6 +106,7 @@ class ItemRequestServiceImplTest {
     }
 
     @Test
+    @DisplayName("Ошибка получения списка всех запросов, если пользователь не найден")
     void getAllRequests_whenUserNotFound_thanNotFoundExceptionThrown() {
         when(userRepository.findById(anyInt())).thenReturn(Optional.empty());
 
@@ -109,6 +116,7 @@ class ItemRequestServiceImplTest {
     }
 
     @Test
+    @DisplayName("Получение запроса по id")
     void getById_returnItemRequest() {
         when(userRepository.findById(anyInt())).thenReturn(Optional.of(requestor));
         when(itemRequestRepository.findById(anyInt())).thenReturn(Optional.of(itemRequest));
@@ -122,6 +130,7 @@ class ItemRequestServiceImplTest {
     }
 
     @Test
+    @DisplayName("Ошибка получения запроса по id, если пользователь не найден")
     void getById_whenUserNotFound_thanNotFoundExceptionThrown() {
         when(userRepository.findById(anyInt())).thenReturn(Optional.empty());
 
@@ -131,10 +140,10 @@ class ItemRequestServiceImplTest {
     }
 
     @Test
+    @DisplayName("Ошибка получения запроса по id, запрос не найден")
     void getById_whenItemRequestNotFound_thanNotFoundExceptionThrown() {
         when(userRepository.findById(anyInt())).thenReturn(Optional.of(requestor));
         when(itemRequestRepository.findById(anyInt())).thenReturn(Optional.empty());
-
 
         assertThrows(NotFoundException.class, () -> itemRequestService.getById(requestor.getId(), itemRequest.getId()));
         verify(userRepository, times(1)).findById(anyInt());

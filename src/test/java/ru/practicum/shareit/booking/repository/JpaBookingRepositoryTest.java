@@ -2,6 +2,7 @@ package ru.practicum.shareit.booking.repository;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -52,6 +53,7 @@ class JpaBookingRepositoryTest {
     }
 
     @Test
+    @DisplayName("Получение списка бронирований пользователя")
     void findByBooker() {
         List<Booking> actualBookings = bookingRepository.findByBooker(booker, Pageable.ofSize(1));
         assertEquals(1, actualBookings.size());
@@ -63,6 +65,7 @@ class JpaBookingRepositoryTest {
     }
 
     @Test
+    @DisplayName("Получение списка бронирований владельца вещи")
     void findByItem_Owner() {
         List<Booking> actualBookings = bookingRepository.findByItem_Owner(owner, Pageable.ofSize(1));
         assertEquals(1, actualBookings.size());
@@ -74,6 +77,7 @@ class JpaBookingRepositoryTest {
     }
 
     @Test
+    @DisplayName("Получение бронирований списка вещей")
     void findAllByItemInAndStatusOrderByStartAsc() {
         Booking booking1 = Booking.builder().start(LocalDateTime.now().plusMinutes(10)).end(LocalDateTime.now()
                 .plusHours(1)).item(item).booker(booker).status(BookingStatus.WAITING).build();
@@ -99,6 +103,7 @@ class JpaBookingRepositoryTest {
     }
 
     @Test
+    @DisplayName("Проверка наличия бронирования по вещи и владельцу бронирования")
     void existsBookingByItemAndBookerAndStatusNotAndStartBefore() {
         Boolean booking = bookingRepository.existsBookingByItemAndBookerAndStatusNotAndStartBefore(
                 item, booker, BookingStatus.APPROVED, LocalDateTime.now().plusMinutes(5));

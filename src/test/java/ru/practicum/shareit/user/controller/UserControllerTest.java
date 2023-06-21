@@ -2,6 +2,7 @@ package ru.practicum.shareit.user.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -36,6 +37,7 @@ class UserControllerTest {
 
     @SneakyThrows
     @Test
+    @DisplayName("Добавление пользователя")
     void saveNewUser() {
         when(userService.saveUser(any(UserDto.class))).thenReturn(userDto);
 
@@ -53,6 +55,7 @@ class UserControllerTest {
 
     @SneakyThrows
     @Test
+    @DisplayName("Получение списка всех пользователей")
     void getAllUsers() {
         when(userService.getAll()).thenReturn(List.of(userDto));
 
@@ -66,6 +69,7 @@ class UserControllerTest {
 
     @SneakyThrows
     @Test
+    @DisplayName("Получение пользователя по id")
     void getUser() {
         when(userService.getById(anyInt())).thenReturn(userDto);
 
@@ -79,6 +83,7 @@ class UserControllerTest {
 
     @SneakyThrows
     @Test
+    @DisplayName("Обновление данных пользователя")
     void updateUser() {
         userDto.setName("updateUser");
         when(userService.updateUser(anyInt(), any(UserDto.class))).thenReturn(userDto);
@@ -98,6 +103,7 @@ class UserControllerTest {
 
     @SneakyThrows
     @Test
+    @DisplayName("Удаление пользователя")
     void deleteUser() {
         mockMvc.perform(delete("/users/{userId}", 1))
                 .andExpect(status().isOk());

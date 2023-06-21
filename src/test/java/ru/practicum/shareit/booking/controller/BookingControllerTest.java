@@ -2,6 +2,7 @@ package ru.practicum.shareit.booking.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -51,7 +52,8 @@ class BookingControllerTest {
 
     @SneakyThrows
     @Test
-    void saveNewBooking1() {
+    @DisplayName("Добавление бронирования")
+    void saveNewBooking() {
         when(bookingService.saveBooking(anyInt(), any(BookingDto.class))).thenReturn(bookingResponseDto);
 
         mockMvc.perform(post("/bookings")
@@ -68,6 +70,7 @@ class BookingControllerTest {
 
     @SneakyThrows
     @Test
+    @DisplayName("Подтверждение бронирования")
     void approveBooking() {
         when(bookingService.approveBooking(anyInt(), anyInt(), anyBoolean())).thenReturn(approvedBookingResponseDto);
 
@@ -82,6 +85,7 @@ class BookingControllerTest {
 
     @SneakyThrows
     @Test
+    @DisplayName("Получение бронирования по id")
     void getBookingById() {
         when(bookingService.getById(anyInt(), anyInt())).thenReturn(bookingResponseDto);
 
@@ -95,6 +99,7 @@ class BookingControllerTest {
 
     @SneakyThrows
     @Test
+    @DisplayName("Получение списка бронирований пользователя")
     void getBookingsByUser() {
         when(bookingService.getByUser(anyInt(), anyString(), anyInt(), anyInt()))
                 .thenReturn(List.of(bookingResponseDto, approvedBookingResponseDto));
@@ -111,6 +116,7 @@ class BookingControllerTest {
 
     @SneakyThrows
     @Test
+    @DisplayName("Получение списка бронирований владельца вещи")
     void getBookingsByItemsOwner() {
         when(bookingService.getByItemsOwner(anyInt(), anyString(), anyInt(), anyInt()))
                 .thenReturn(List.of(bookingResponseDto));

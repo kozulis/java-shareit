@@ -2,6 +2,7 @@ package ru.practicum.shareit.item.repository;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -45,6 +46,7 @@ class JpaItemRepositoryTest {
     }
 
     @Test
+    @DisplayName("Получение списка вещей пользователя")
     void findAllByOwnerId() {
         Integer id = owner.getId();
         List<Item> actualItems = itemRepository.findAllByOwnerId(id, Pageable.ofSize(1));
@@ -57,6 +59,7 @@ class JpaItemRepositoryTest {
     }
 
     @Test
+    @DisplayName("Поиск вещи по названию или описанию")
     void search() {
         List<Item> actualItems = itemRepository.search("ПроСт", Pageable.ofSize(1));
         assertEquals(1, actualItems.size());
@@ -68,6 +71,7 @@ class JpaItemRepositoryTest {
     }
 
     @Test
+    @DisplayName("Получение списка вещей по списку запросов")
     void findAllByRequestIdIn() {
         User requestor = User.builder().name("requestor").email("requestor@user.com").build();
         userRepository.save(requestor);

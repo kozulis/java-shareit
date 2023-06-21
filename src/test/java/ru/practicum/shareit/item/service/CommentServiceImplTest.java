@@ -1,5 +1,6 @@
 package ru.practicum.shareit.item.service;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -48,6 +49,7 @@ class CommentServiceImplTest {
 
 
     @Test
+    @DisplayName("Добавление комментария к вещи после бронирования")
     void saveComment_returnComment() {
         when(userRepository.findById(anyInt())).thenReturn(Optional.of(author));
         when(itemRepository.findById(anyInt())).thenReturn(Optional.of(item));
@@ -69,6 +71,7 @@ class CommentServiceImplTest {
     }
 
     @Test
+    @DisplayName("Ошибка добавления комментария к вещи, если пользователь не найден")
     void saveComment_whenAuthorNotFound_thanNotFoundExceptionThrown() {
         when(userRepository.findById(anyInt())).thenReturn(Optional.empty());
 
@@ -83,6 +86,7 @@ class CommentServiceImplTest {
     }
 
     @Test
+    @DisplayName("Ошибка добавления комментария к вещи, если вещь не найдена")
     void saveComment_whenItemNotFound_thanNotFoundExceptionThrown() {
         when(userRepository.findById(anyInt())).thenReturn(Optional.of(author));
         when(itemRepository.findById(anyInt())).thenReturn(Optional.empty());
@@ -98,6 +102,7 @@ class CommentServiceImplTest {
     }
 
     @Test
+    @DisplayName("Ошибка добавления комментария к вещи, если бронирование не найдено")
     void saveComment_whenBookingNotExist_thanValidationExceptionThrown() {
         when(userRepository.findById(anyInt())).thenReturn(Optional.of(author));
         when(itemRepository.findById(anyInt())).thenReturn(Optional.of(item));

@@ -2,6 +2,7 @@ package ru.practicum.shareit.request.repository;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -42,6 +43,7 @@ class JpaItemRequestRepositoryTest {
     }
 
     @Test
+    @DisplayName("Получение списка всех запросов, отсортированных по дате создания в убывающем порядке")
     void findAllByRequestorOrderByCreatedDesc() {
         List<ItemRequest> itemRequests = itemRequestRepository.findAllByRequestorOrderByCreatedDesc(requestor);
         assertEquals(2, itemRequests.size());

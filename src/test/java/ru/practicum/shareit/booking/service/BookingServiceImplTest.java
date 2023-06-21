@@ -1,5 +1,6 @@
 package ru.practicum.shareit.booking.service;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -53,6 +54,7 @@ class BookingServiceImplTest {
     private final Booking booking = BookingMapper.toBooking(bookingDto, item, booker);
 
     @Test
+    @DisplayName("Добавление бронирования")
     void saveBooking_returnBooking() {
         when(userRepository.findById(anyInt())).thenReturn(Optional.of(booker));
         when(itemRepository.findById(anyInt())).thenReturn(Optional.of(item));
@@ -68,6 +70,7 @@ class BookingServiceImplTest {
     }
 
     @Test
+    @DisplayName("Ошибка при добавлении бронирования, если пользователь не найден")
     void saveBooking_whenWrongUserId_thanNotFoundExceptionThrown() {
         when(userRepository.findById(anyInt())).thenReturn(Optional.empty());
 
@@ -78,6 +81,7 @@ class BookingServiceImplTest {
     }
 
     @Test
+    @DisplayName("Ошибка при добавлении бронирования, если вещь не найдена")
     void saveBooking_whenWrongItemId_thanNotFoundExceptionThrown() {
         int wrongItemId = 100;
         bookingDto.setItemId(wrongItemId);
@@ -92,6 +96,7 @@ class BookingServiceImplTest {
     }
 
     @Test
+    @DisplayName("Ошибка при добавлении бронирования, если вещь не доступна для бронирования")
     void saveBooking_whenItemNotAvailable_thanValidationExceptionThrown() {
         item.setAvailable(false);
 
@@ -105,6 +110,7 @@ class BookingServiceImplTest {
     }
 
     @Test
+    @DisplayName("Ошибка при добавлении бронирования при попытке забронировать собственную вещь")
     void saveBooking_whenOwnerEqualUser_thanNotFoundExceptionThrown() {
         item.setOwner(booker);
 
@@ -118,6 +124,7 @@ class BookingServiceImplTest {
     }
 
     @Test
+    @DisplayName("Ошибка при добавлении бронирования, если задано некорректное время")
     void saveBooking_whenIncorrectBookingTime_thanNotValidationExceptionThrown() {
         when(userRepository.findById(anyInt())).thenReturn(Optional.of(booker));
         when(itemRepository.findById(anyInt())).thenReturn(Optional.of(item));
@@ -135,6 +142,7 @@ class BookingServiceImplTest {
     }
 
     @Test
+    @DisplayName("Подтверждение бронирования")
     void approveBooking_returnApprove() {
         Integer bookerId = booking.getItem().getOwner().getId();
         when(bookingRepository.findById(anyInt())).thenReturn(Optional.of(booking));
@@ -150,6 +158,7 @@ class BookingServiceImplTest {
     }
 
     @Test
+    @DisplayName("Ошибка подтверждения бронирования, если бронирование не найдено")
     void approveBooking_whenWrongBookingId_thanNotFoundExceptionThrown() {
         when(bookingRepository.findById(anyInt())).thenReturn(Optional.empty());
 
@@ -160,6 +169,7 @@ class BookingServiceImplTest {
     }
 
     @Test
+    @DisplayName("Отклонение запроса на бронирование")
     void approveBooking_whenBookingStatusSwitchToRejected_thanReturnApprove() {
         Integer bookerId = booking.getItem().getOwner().getId();
         when(bookingRepository.findById(anyInt())).thenReturn(Optional.of(booking));
@@ -174,6 +184,7 @@ class BookingServiceImplTest {
     }
 
     @Test
+    @DisplayName("Ошибка подтверждения бронирования, если бронирование отклонено")
     void approveBooking_whenBookingStatusIsRejected_thanValidationExceptionThrown() {
         Integer bookerId = booking.getItem().getOwner().getId();
         booking.setStatus(BookingStatus.REJECTED);
@@ -186,6 +197,7 @@ class BookingServiceImplTest {
     }
 
     @Test
+    @DisplayName("Ошибка подтверждения бронирования при попытке забронировать собственную вещь")
     void approveBooking_whenBookingOwnerEqualsItemOwner_thanNotFoundExceptionThrown() {
         Integer bookerId = booking.getItem().getOwner().getId() + 1;
 
@@ -199,6 +211,7 @@ class BookingServiceImplTest {
 
 
     @Test
+    @DisplayName("Получение бронирования по id")
     void getById_whenBookingFound_returnBooking() {
         Integer itemOwnerId = booking.getItem().getOwner().getId();
         when(bookingRepository.findById(booking.getId())).thenReturn(Optional.of(booking));
@@ -211,6 +224,7 @@ class BookingServiceImplTest {
     }
 
     @Test
+    @DisplayName("Ошибка получения бронирования по id, если владелец бронирования не найден")
     void getById_whenBookerFound_thanNotFoundExceptionThrown() {
         when(bookingRepository.findById(booking.getId())).thenReturn(Optional.empty());
 
@@ -220,7 +234,9 @@ class BookingServiceImplTest {
     }
 
     @Test
-    void getById_whenBookerAndItemOwnerNotEqualsBookingOwner_thanNotFoundExceptionThrown() {
+    @DisplayName("Ошибка получения бронирования по id при запросе пользователем, не являющимся " +
+            "владельцем вещи или владельцем бронирования")
+    void getById_whenBookerOrItemOwnerNotEqualsBookingOwner_thanNotFoundExceptionThrown() {
         Integer bookerId = booking.getBooker().getId() + 1;
         Integer itemOwnerId = booking.getItem().getOwner().getId() + 1;
         bookingDto.setBookerId(bookerId + 1);
@@ -233,6 +249,7 @@ class BookingServiceImplTest {
     }
 
     @Test
+    @DisplayName("Получения списка бронирований пользователя")
     void getByUser_returnListOfBookings() {
         when(userRepository.findById(anyInt())).thenReturn(Optional.of(booker));
         when(bookingRepository.findByBooker(any(), any())).thenReturn(List.of(booking));
@@ -247,6 +264,7 @@ class BookingServiceImplTest {
     }
 
     @Test
+    @DisplayName("Ошибка получения бронирования, если владелец бронирования не найден")
     void getByUser_whenBookerNotFound_thanNotFoundExceptionThrown() {
         when(userRepository.findById(anyInt())).thenReturn(Optional.empty());
 
@@ -258,6 +276,7 @@ class BookingServiceImplTest {
 
 
     @Test
+    @DisplayName("Получения списка бронирований владельца вещи")
     void getByItemsOwner_returnListOfBookings() {
         when(userRepository.findById(anyInt())).thenReturn(Optional.of(booker));
         when(bookingRepository.findByItem_Owner(any(User.class), any(Pageable.class))).thenReturn(List.of(booking));
@@ -272,6 +291,7 @@ class BookingServiceImplTest {
     }
 
     @Test
+    @DisplayName("Ошибка получения бронирования, если владелец вещи не найден")
     void getByItemsOwner_whenItemOwnerNotFound_thanNotFoundExceptionThrown() {
         when(userRepository.findById(anyInt())).thenReturn(Optional.empty());
 
@@ -282,6 +302,7 @@ class BookingServiceImplTest {
     }
 
     @Test
+    @DisplayName("Получение списка бронирований со любым статусом")
     void getByItemsOwner_whenBookingStateIsALL_thanReturnListOfBookings() {
         when(userRepository.findById(anyInt())).thenReturn(Optional.of(booker));
         when(bookingRepository.findByItem_Owner(any(User.class), any(Pageable.class))).thenReturn(List.of(booking));
@@ -296,6 +317,7 @@ class BookingServiceImplTest {
     }
 
     @Test
+    @DisplayName("Ошибка получения бронирований с неизвестным статусом ")
     void getByItemsOwner_whenBookingByStateIsWrong_thanReturnListOfBookings() {
         assertThrows(UnknownBookingStateException.class, () -> bookingService.getByItemsOwner(
                 owner.getId(), "WRONG", 0, 10));
@@ -305,6 +327,7 @@ class BookingServiceImplTest {
 
 
     @Test
+    @DisplayName("Получение списка бронирований со статусом 'Текущие'")
     void getByItemsOwner_whenBookingByStateIsCurrent_thanReturnListOfBookings() {
         when(userRepository.findById(anyInt())).thenReturn(Optional.of(booker));
         when(bookingRepository.findByItem_Owner(any(User.class), any(Pageable.class))).thenReturn(List.of(booking));
@@ -321,6 +344,7 @@ class BookingServiceImplTest {
     }
 
     @Test
+    @DisplayName("Получение списка бронирований со статусом 'Прошедние'")
     void getByItemsOwner_whenBookingByStateIsPAST_thanReturnListOfBookings() {
         when(userRepository.findById(anyInt())).thenReturn(Optional.of(booker));
         when(bookingRepository.findByItem_Owner(any(User.class), any(Pageable.class))).thenReturn(List.of(booking));
@@ -337,6 +361,7 @@ class BookingServiceImplTest {
     }
 
     @Test
+    @DisplayName("Получение списка бронирований со статусом 'Будущие'")
     void getByItemsOwner_whenBookingByStateIsFUTURE_thanReturnListOfBookings() {
         when(userRepository.findById(anyInt())).thenReturn(Optional.of(booker));
         when(bookingRepository.findByItem_Owner(any(User.class), any(Pageable.class))).thenReturn(List.of(booking));
@@ -353,6 +378,7 @@ class BookingServiceImplTest {
     }
 
     @Test
+    @DisplayName("Получение списка бронирований со статусом 'В ожидании'")
     void getByItemsOwner_whenBookingByStateIsWAITING_thanReturnListOfBookings() {
         when(userRepository.findById(anyInt())).thenReturn(Optional.of(booker));
         when(bookingRepository.findByItem_Owner(any(User.class), any(Pageable.class))).thenReturn(List.of(booking));
@@ -369,6 +395,7 @@ class BookingServiceImplTest {
     }
 
     @Test
+    @DisplayName("Получение списка бронирований со статусом 'Отклонены'")
     void getByItemsOwner_whenBookingByStateIsREJECTED_thanReturnListOfBookings() {
         when(userRepository.findById(anyInt())).thenReturn(Optional.of(booker));
         when(bookingRepository.findByItem_Owner(any(User.class), any(Pageable.class))).thenReturn(List.of(booking));

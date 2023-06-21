@@ -2,6 +2,7 @@ package ru.practicum.shareit.request.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -38,6 +39,7 @@ class ItemRequestControllerTest {
 
     @SneakyThrows
     @Test
+    @DisplayName("Добавление запроса на вещь")
     void saveNewRequest() {
         when(itemRequestService.saveItemRequest(anyInt(), any(ItemRequestDto.class))).thenReturn(itemRequestDto);
 
@@ -55,6 +57,7 @@ class ItemRequestControllerTest {
 
     @SneakyThrows
     @Test
+    @DisplayName("Получение списка собственных запросов")
     void getOwnRequests() {
         when(itemRequestService.getOwnRequests(anyInt())).thenReturn(List.of(itemRequestDto));
 
@@ -69,6 +72,7 @@ class ItemRequestControllerTest {
     @SneakyThrows
 
     @Test
+    @DisplayName("Получение списка всех запросов")
     void getAllRequests() {
         when(itemRequestService.getAllRequests(anyInt(), anyInt(), anyInt())).thenReturn(List.of(itemRequestDto));
 
@@ -84,6 +88,7 @@ class ItemRequestControllerTest {
 
     @SneakyThrows
     @Test
+    @DisplayName("Получение запроса по id")
     void getRequestById() {
         when(itemRequestService.getById(anyInt(), anyInt())).thenReturn(itemRequestDto);
 

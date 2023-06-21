@@ -1,6 +1,7 @@
 package ru.practicum.shareit.user.service;
 
 import lombok.RequiredArgsConstructor;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,6 +22,7 @@ class UserServiceIntTest {
     private final UserDto userDto = UserDto.builder().name("user").email("user@user.com").build();
 
     @Test
+    @DisplayName("Получение пользователя по id")
     void getById() {
         UserDto savesUserDto = userService.saveUser(userDto);
 

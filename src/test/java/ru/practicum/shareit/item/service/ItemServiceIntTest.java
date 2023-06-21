@@ -1,6 +1,7 @@
 package ru.practicum.shareit.item.service;
 
 import lombok.RequiredArgsConstructor;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -30,6 +31,7 @@ class ItemServiceIntTest {
 
 
     @Test
+    @DisplayName("Добавление вещи")
     void saveItem() {
         UserDto savedItemOwnerDto = userService.saveUser(itemOwnerDto);
 
@@ -41,6 +43,7 @@ class ItemServiceIntTest {
     }
 
     @Test
+    @DisplayName("Получение списка вещей пользователя")
     void getAllByUserId() {
         UserDto savedItemOwnerDto = userService.saveUser(itemOwnerDto);
         itemService.saveItem(savedItemOwnerDto.getId(), itemDto);

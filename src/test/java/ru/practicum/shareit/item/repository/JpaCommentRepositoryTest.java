@@ -2,6 +2,7 @@ package ru.practicum.shareit.item.repository;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -53,6 +54,7 @@ class JpaCommentRepositoryTest {
     }
 
     @Test
+    @DisplayName("Получение списка комментариев к вещи, отсортированных по id в возрастающем порядке")
     void findByItemOrderByIdAsc() {
         List<Comment> actualComments = commentRepository.findByItemOrderByIdAsc(item);
         assertEquals(2, actualComments.size());
@@ -70,6 +72,7 @@ class JpaCommentRepositoryTest {
     }
 
     @Test
+    @DisplayName("Получение списка комментариев для списка вещей")
     void findByItemIn() {
         Item item1 = Item.builder().name("Отвертка").description("Аккумуляторная отвертка").available(true)
                 .owner(owner).build();

@@ -1,5 +1,6 @@
 package ru.practicum.shareit.item.service;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -67,6 +68,7 @@ class ItemServiceImplTest {
 
 
     @Test
+    @DisplayName("Добавление вещи")
     void saveItem_returnItem() {
         when(userRepository.findById(anyInt())).thenReturn(Optional.of(user));
         when(itemRequestRepository.findById(anyInt())).thenReturn(Optional.of(itemRequest));
@@ -83,6 +85,7 @@ class ItemServiceImplTest {
     }
 
     @Test
+    @DisplayName("Ошибка добавления вещи, если пользователь не найден")
     void saveItem_whenUserNotFound_thanNotFoundExceptionThrown() {
         when(userRepository.findById(anyInt())).thenReturn(Optional.empty());
 
@@ -93,6 +96,7 @@ class ItemServiceImplTest {
     }
 
     @Test
+    @DisplayName("Ошибка добавления вещи, если запрос на вещь не найден")
     void saveItem_whenItemRequestNotFound_thanNotFoundExceptionThrown() {
         when(userRepository.findById(anyInt())).thenReturn(Optional.of(user));
         when(itemRequestRepository.findById(anyInt())).thenReturn(Optional.empty());
@@ -105,6 +109,7 @@ class ItemServiceImplTest {
     }
 
     @Test
+    @DisplayName("Получение списка вещей пользователя")
     void getAllByUserId_returnItemList() {
         when(userRepository.findById(anyInt())).thenReturn(Optional.of(user));
         when(itemRepository.findAllByOwnerId(anyInt(), any(Pageable.class))).thenReturn(
@@ -126,6 +131,7 @@ class ItemServiceImplTest {
     }
 
     @Test
+    @DisplayName("Ошибка получения списка вещей, если пользователь не найден")
     void getAllByUserId_whenUserNotFound_thanNotFoundExceptionThrown() {
         when(userRepository.findById(anyInt())).thenReturn(Optional.empty());
 
@@ -138,6 +144,7 @@ class ItemServiceImplTest {
     }
 
     @Test
+    @DisplayName("Получение вещи по id")
     void getById_returnItem() {
         when(itemRepository.findById(anyInt())).thenReturn(Optional.of(item));
         when(bookingRepository.findAllByItemInAndStatusOrderByStartAsc(anyList(), any(BookingStatus.class)))
@@ -156,6 +163,7 @@ class ItemServiceImplTest {
     }
 
     @Test
+    @DisplayName("Получение вещи по id, не имеющей комментариев")
     void getById_returnItemWithoutComments() {
         when(itemRepository.findById(anyInt())).thenReturn(Optional.of(item));
         when(bookingRepository.findAllByItemInAndStatusOrderByStartAsc(anyList(), any(BookingStatus.class)))
@@ -175,6 +183,7 @@ class ItemServiceImplTest {
 
 
     @Test
+    @DisplayName("Ошибка получения вещи по id, если вещь не найдена")
     void getById_whenItemNotFound_thanNotFoundExceptionThrown() {
         when(itemRepository.findById(anyInt())).thenReturn(Optional.empty());
 
@@ -186,6 +195,7 @@ class ItemServiceImplTest {
     }
 
     @Test
+    @DisplayName("Обновление параметров вещи")
     void updateItem_returnItem() {
         when(itemRepository.findById(anyInt())).thenReturn(Optional.of(item));
         when(itemRepository.save(any(Item.class))).thenReturn(item);
@@ -202,6 +212,7 @@ class ItemServiceImplTest {
     }
 
     @Test
+    @DisplayName("Ошибка получения обновлении параметров вещи, если вещь не найдена")
     void updateItem_whenItemNotFound_thanNotFoundExceptionThrown() {
         when(itemRepository.findById(anyInt())).thenReturn(Optional.empty());
 
@@ -212,6 +223,7 @@ class ItemServiceImplTest {
     }
 
     @Test
+    @DisplayName("Ошибка получения обновлении параметров вещи при попытке обновления другим пользователем")
     void updateItem_whenWrongItemOwner_thanNotFoundExceptionThrown() {
         when(itemRepository.findById(anyInt())).thenReturn(Optional.of(item));
 
@@ -223,12 +235,14 @@ class ItemServiceImplTest {
 
 
     @Test
+    @DisplayName("Удаление вещи")
     void deleteById() {
         itemService.deleteById(item.getId());
         verify(itemRepository, times(1)).deleteById(anyInt());
     }
 
     @Test
+    @DisplayName("Поиск вещи по названию или описанию")
     void searchItem_ReturnItemList() {
         when(itemRepository.search(anyString(), any(Pageable.class))).thenReturn(List.of(item));
 
@@ -240,6 +254,7 @@ class ItemServiceImplTest {
     }
 
     @Test
+    @DisplayName("Поиск вещи по названию или описанию возвращает пустой список")
     void searchItem_ReturnEmptyItemList() {
         List<ItemDto> actualItemDtoList = itemService.searchItem(user.getId(), "", 0, 10);
 

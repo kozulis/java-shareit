@@ -1,6 +1,7 @@
 package ru.practicum.shareit.item.service;
 
 import lombok.RequiredArgsConstructor;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -42,6 +43,7 @@ class CommentServiceIntTest {
     private final CommentDto commentDto = CommentDto.builder().text("commentText").build();
 
     @Test
+    @DisplayName("Добавление комментария к вещи после бронирования")
     void saveComment() {
         UserDto savedItemOwnerDto = userService.saveUser(itemOwnerDto);
         UserDto savedBookerDto = userService.saveUser(bookerDto);

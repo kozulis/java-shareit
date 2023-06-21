@@ -2,6 +2,7 @@ package ru.practicum.shareit.item.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -45,6 +46,7 @@ class ItemControllerTest {
 
     @SneakyThrows
     @Test
+    @DisplayName("Добавление вещи")
     void saveNewItem() {
         when(itemService.saveItem(anyInt(), any(ItemDto.class))).thenReturn(goodItemDto);
 
@@ -62,6 +64,7 @@ class ItemControllerTest {
 
     @SneakyThrows
     @Test
+    @DisplayName("Получение списка вещей пользователя")
     void getAllItemsByUserId() {
         when(itemService.getAllByUserId(anyInt(), anyInt(), anyInt())).thenReturn(List.of(goodItemDto, badItemDto));
 
@@ -77,6 +80,7 @@ class ItemControllerTest {
 
     @SneakyThrows
     @Test
+    @DisplayName("Получение вещи по id")
     void getItem() {
         when(itemService.getById(anyInt(), anyInt())).thenReturn(goodItemDto);
 
@@ -90,6 +94,7 @@ class ItemControllerTest {
 
     @SneakyThrows
     @Test
+    @DisplayName("Обновление параметров вещи")
     void updateItem() {
         when(itemService.updateItem(anyInt(), anyInt(), any(ItemDto.class))).thenReturn(goodItemDto);
         goodItemDto.setDescription("Бомбезная весчь!");
@@ -109,6 +114,7 @@ class ItemControllerTest {
 
     @SneakyThrows
     @Test
+    @DisplayName("Удаление вещи по id")
     void deleteItem() {
         mockMvc.perform(delete("/items/{itemId}", 1))
                 .andExpect(status().isOk());
@@ -118,6 +124,7 @@ class ItemControllerTest {
 
     @SneakyThrows
     @Test
+    @DisplayName("Поиск вещи по названию или описанию")
     void searchItem() {
         when(itemService.searchItem(anyInt(), anyString(), anyInt(), anyInt())).thenReturn((List.of(goodItemDto)));
 
@@ -133,6 +140,7 @@ class ItemControllerTest {
 
     @SneakyThrows
     @Test
+    @DisplayName("Добавление комментария к вещи после бронирования")
     void saveNewComment() {
         when(commentService.saveComment(anyInt(), anyInt(), any(CommentDto.class))).thenReturn(commentDto);
 

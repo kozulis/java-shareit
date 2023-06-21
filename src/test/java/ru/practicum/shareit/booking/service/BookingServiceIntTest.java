@@ -1,6 +1,7 @@
 package ru.practicum.shareit.booking.service;
 
 import lombok.RequiredArgsConstructor;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -39,6 +40,7 @@ class BookingServiceIntTest {
 
 
     @Test
+    @DisplayName("Получения списка бронирований владельца вещи")
     void getByItemsOwner() {
         UserDto savedOwnerDto = userService.saveUser(ownerDto);
         UserDto savedBookerDto = userService.saveUser(bookerDto);

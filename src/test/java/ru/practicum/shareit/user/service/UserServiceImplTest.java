@@ -1,5 +1,6 @@
 package ru.practicum.shareit.user.service;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -30,6 +31,7 @@ class UserServiceImplTest {
     private final UserDto userDto = UserDto.builder().name("user").email("user@user.com").build();
 
     @Test
+    @DisplayName("Добавление пользователя")
     void saveUser_returnUser() {
         when(userRepository.save(any(User.class))).thenReturn(user);
 
@@ -41,6 +43,7 @@ class UserServiceImplTest {
     }
 
     @Test
+    @DisplayName("Получение списка всех пользователей")
     void getAll_returnUserList() {
         when(userRepository.findAll()).thenReturn(List.of(user));
 
@@ -52,6 +55,7 @@ class UserServiceImplTest {
     }
 
     @Test
+    @DisplayName("Получение пользователя по id")
     void getById_returnUser() {
         when(userRepository.findById(anyInt())).thenReturn(Optional.of(user));
 
@@ -63,6 +67,7 @@ class UserServiceImplTest {
     }
 
     @Test
+    @DisplayName("Ошибка получения пользователя по id, если пользователь не найден")
     void getById_whenUserNotFound_thanNotFoundExceptionThrown() {
         when(userRepository.findById(anyInt())).thenReturn(Optional.empty());
 
@@ -71,6 +76,7 @@ class UserServiceImplTest {
     }
 
     @Test
+    @DisplayName("Обновление данных пользователя")
     void updateUser_returnUser() {
         userDto.setName("userUpdate");
         userDto.setEmail("userUpdate@user.com");
@@ -86,6 +92,7 @@ class UserServiceImplTest {
     }
 
     @Test
+    @DisplayName("Ошибка обновления данных пользователя, если пользователь не найден")
     void updateUser_whenUserNotFound_thanNotFoundExceptionThrown() {
         when(userRepository.findById(anyInt())).thenReturn(Optional.empty());
 
@@ -96,6 +103,7 @@ class UserServiceImplTest {
 
 
     @Test
+    @DisplayName("Удаление пользователя")
     void delete() {
         when(userRepository.findById(anyInt())).thenReturn(Optional.of(user));
 
@@ -105,6 +113,7 @@ class UserServiceImplTest {
     }
 
     @Test
+    @DisplayName("Ошибка удаления пользователя, если пользователь не найден")
     void delete_whenUserNotFound_thanNotFoundExceptionThrown() {
         when(userRepository.findById(anyInt())).thenReturn(Optional.empty());
 
