@@ -34,7 +34,7 @@ class CommentServiceIntTest {
 
     LocalDateTime now = LocalDateTime.now();
 
-    private final UserDto ItemOwnerDto = UserDto.builder().name("itemOwner").email("itemOwner@user.com").build();
+    private final UserDto itemOwnerDto = UserDto.builder().name("itemOwner").email("itemOwner@user.com").build();
     private final UserDto bookerDto = UserDto.builder().name("booker").email("booker@user.com").build();
 
     private final ItemDto itemDto = ItemDto.builder().name("itemName").description("itemDescription").available(true).build();
@@ -43,7 +43,7 @@ class CommentServiceIntTest {
 
     @Test
     void saveComment() {
-        UserDto savedItemOwnerDto = userService.saveUser(ItemOwnerDto);
+        UserDto savedItemOwnerDto = userService.saveUser(itemOwnerDto);
         UserDto savedBookerDto = userService.saveUser(bookerDto);
         ItemDto savedItemDto = itemService.saveItem(savedItemOwnerDto.getId(), itemDto);
         BookingResponseDto savedBookingResponseDto = bookingService.saveBooking(savedBookerDto.getId(), bookingDto);

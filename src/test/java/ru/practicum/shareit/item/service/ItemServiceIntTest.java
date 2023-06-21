@@ -24,14 +24,14 @@ class ItemServiceIntTest {
     private final ItemService itemService;
     private final UserService userService;
 
-    private final UserDto ItemOwnerDto = UserDto.builder().name("itemOwner").email("itemOwner@user.com").build();
+    private final UserDto itemOwnerDto = UserDto.builder().name("itemOwner").email("itemOwner@user.com").build();
     private final ItemDto itemDto = ItemDto.builder().name("itemName").description("itemDescription").available(true).build();
     private final ItemDto itemDto2 = ItemDto.builder().name("itemName2").description("itemDescription2").available(true).build();
 
 
     @Test
     void saveItem() {
-        UserDto savedItemOwnerDto = userService.saveUser(ItemOwnerDto);
+        UserDto savedItemOwnerDto = userService.saveUser(itemOwnerDto);
 
         ItemDto actualItemDto = itemService.saveItem(savedItemOwnerDto.getId(), itemDto);
 
@@ -42,7 +42,7 @@ class ItemServiceIntTest {
 
     @Test
     void getAllByUserId() {
-        UserDto savedItemOwnerDto = userService.saveUser(ItemOwnerDto);
+        UserDto savedItemOwnerDto = userService.saveUser(itemOwnerDto);
         itemService.saveItem(savedItemOwnerDto.getId(), itemDto);
         itemService.saveItem(savedItemOwnerDto.getId(), itemDto2);
         List<ItemDto> allByUserId = itemService.getAllByUserId(savedItemOwnerDto.getId(), 0, 10);

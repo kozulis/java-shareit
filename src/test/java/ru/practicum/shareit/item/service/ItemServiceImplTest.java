@@ -114,8 +114,8 @@ class ItemServiceImplTest {
                 .thenReturn(List.of(booking));
 
         List<ItemDto> actualItemDto = itemService.getAllByUserId(user.getId(), 0, 10);
-        List<ItemDto> expectItemDto = List.of(ItemMapper.toItemDto(item, null, BookingMapper.toBookingDto(booking)
-                , List.of(CommentMapper.toCommentDto(comment))));
+        List<ItemDto> expectItemDto = List.of(ItemMapper.toItemDto(item, null, BookingMapper.toBookingDto(booking),
+                List.of(CommentMapper.toCommentDto(comment))));
 
         assertEquals(actualItemDto, expectItemDto);
         verify(userRepository, times(1)).findById(anyInt());
