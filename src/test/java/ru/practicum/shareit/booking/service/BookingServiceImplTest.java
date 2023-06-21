@@ -40,7 +40,7 @@ class BookingServiceImplTest {
     @Mock
     private ItemRepository itemRepository;
     @InjectMocks
-    BookingServiceImpl bookingService;
+    private BookingServiceImpl bookingService;
 
     LocalDateTime now = LocalDateTime.now();
 

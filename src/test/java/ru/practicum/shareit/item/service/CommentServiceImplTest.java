@@ -37,9 +37,8 @@ class CommentServiceImplTest {
     @Mock
     private BookingRepository bookingRepository;
     @InjectMocks
-    CommentServiceImpl commentService;
+    private CommentServiceImpl commentService;
 
-    LocalDateTime now = LocalDateTime.now();
     private final User author = User.builder().id(1).name("author").email("author@user.com").build();
     private final User owner = User.builder().id(2).name("owner").email("owner@user.com").build();
     private final Item item = Item.builder().id(3).name("itemName").description("itemDescription").available(true)
