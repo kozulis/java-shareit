@@ -49,28 +49,6 @@ class BookingControllerTest {
                     .getStart()).end(bookingDto.getEnd()).item(itemDto).booker(bookerDto)
             .status(BookingStatus.APPROVED).build();
 
-//    @SneakyThrows
-//    @Test
-//    void saveNewBooking() {
-//        when(bookingService.saveBooking(anyInt(), any(BookingDto.class))).thenReturn(bookingResponseDto);
-//
-//        mockMvc.perform(post("/bookings")
-//                        .header("X-Sharer-User-Id", 1)
-//                        .content(objectMapper.writeValueAsString(bookingDto))
-//                        .characterEncoding(StandardCharsets.UTF_8)
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .accept(MediaType.APPLICATION_JSON))
-//                .andExpect(status().isOk())
-//                .andDo(print())
-//                .andExpect(jsonPath("$.id", is(1), Integer.class))
-//                .andExpect(jsonPath("$.start", is(notNullValue())))
-//                .andExpect(jsonPath("$.end", is(notNullValue())))
-//                .andExpect(jsonPath("$.item.name", is("drill")))
-//                .andExpect(jsonPath("$.booker.name", is("user")))
-//                .andExpect(jsonPath("$.status", is(BookingStatus.WAITING.name())));
-//        verify(bookingService, times(1)).saveBooking(anyInt(), any(BookingDto.class));
-//    }
-
     @SneakyThrows
     @Test
     void saveNewBooking1() {
@@ -87,26 +65,6 @@ class BookingControllerTest {
 
         verify(bookingService, times(1)).saveBooking(anyInt(), any(BookingDto.class));
     }
-
-//    @SneakyThrows
-//    @Test
-//    void saveNewBooking2() {
-//        when(bookingService.saveBooking(anyInt(), any(BookingDto.class))).thenReturn(bookingResponseDto);
-//
-//        String result = mockMvc.perform(post("/bookings")
-//                        .header("X-Sharer-User-Id", 1)
-//                        .content(objectMapper.writeValueAsString(bookingDto))
-//                        .characterEncoding(StandardCharsets.UTF_8)
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .accept(MediaType.APPLICATION_JSON))
-//                .andExpect(status().isOk())
-//                .andReturn()
-//                .getResponse()
-//                .getContentAsString();
-//
-//        assertEquals(objectMapper.writeValueAsString(bookingResponseDto), result);
-//        verify(bookingService, times(1)).saveBooking(anyInt(), any(BookingDto.class));
-//    }
 
     @SneakyThrows
     @Test
