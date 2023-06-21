@@ -26,11 +26,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class CommentServiceIntTest {
 
-
     private final CommentService commentService;
-
     private final ItemService itemService;
-
     private final UserService userService;
 
     private final BookingService bookingService;

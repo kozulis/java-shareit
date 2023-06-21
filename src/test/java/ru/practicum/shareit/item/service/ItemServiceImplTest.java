@@ -47,6 +47,8 @@ class ItemServiceImplTest {
     private CommentRepository commentRepository;
     @Mock
     private ItemRequestRepository itemRequestRepository;
+    @InjectMocks
+    private ItemServiceImpl itemService;
 
     LocalDateTime now = LocalDateTime.now();
 
@@ -63,9 +65,6 @@ class ItemServiceImplTest {
             .itemId(3).build();
     private final Booking booking = BookingMapper.toBooking(bookingDto, item, booker);
 
-
-    @InjectMocks
-    private ItemServiceImpl itemService;
 
     @Test
     void saveItem_returnItem() {
@@ -84,7 +83,7 @@ class ItemServiceImplTest {
     }
 
     @Test
-    void saveItem_whenUserNorFound_thanNotFoundExceptionThrown() {
+    void saveItem_whenUserNotFound_thanNotFoundExceptionThrown() {
         when(userRepository.findById(anyInt())).thenReturn(Optional.empty());
 
         assertThrows(NotFoundException.class, () -> itemService.saveItem(user.getId(), itemDto));
@@ -94,7 +93,7 @@ class ItemServiceImplTest {
     }
 
     @Test
-    void saveItem_whenItemRequestFound_thanNotFoundExceptionThrown() {
+    void saveItem_whenItemRequestNotFound_thanNotFoundExceptionThrown() {
         when(userRepository.findById(anyInt())).thenReturn(Optional.of(user));
         when(itemRequestRepository.findById(anyInt())).thenReturn(Optional.empty());
 
@@ -127,7 +126,7 @@ class ItemServiceImplTest {
     }
 
     @Test
-    void getAllByUserId_whenUserNorFound_thanNotFoundExceptionThrown() {
+    void getAllByUserId_whenUserNotFound_thanNotFoundExceptionThrown() {
         when(userRepository.findById(anyInt())).thenReturn(Optional.empty());
 
         assertThrows(NotFoundException.class, () -> itemService.getAllByUserId(user.getId(), 0, 10));
@@ -176,7 +175,7 @@ class ItemServiceImplTest {
 
 
     @Test
-    void getById_whenItemNorFound_thanNotFoundExceptionThrown() {
+    void getById_whenItemNotFound_thanNotFoundExceptionThrown() {
         when(itemRepository.findById(anyInt())).thenReturn(Optional.empty());
 
         assertThrows(NotFoundException.class, () -> itemService.getById(user.getId(), item.getId()));

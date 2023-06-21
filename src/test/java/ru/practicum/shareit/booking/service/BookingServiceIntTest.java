@@ -25,11 +25,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class BookingServiceIntTest {
 
-    @Autowired
     private final BookingService bookingService;
-    @Autowired
     private final UserService userService;
-    @Autowired
     private final ItemService itemService;
 
     LocalDateTime now = LocalDateTime.now();
