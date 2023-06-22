@@ -1,4 +1,4 @@
-package ru.practicum.shareit.booking;
+package ru.practicum.shareit.booking.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -9,6 +9,8 @@ import ru.practicum.shareit.booking.dto.BookingResponseDto;
 import ru.practicum.shareit.booking.service.BookingService;
 import ru.practicum.shareit.validation.OnCreate;
 
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
 @RestController
@@ -46,15 +48,27 @@ public class BookingController {
 
     @GetMapping
     public List<BookingResponseDto> getBookingsByUser(@RequestHeader("X-Sharer-User-Id") Integer userId,
-                                                      @RequestParam(defaultValue = "ALL") String state) {
+                                                      @RequestParam(defaultValue = "ALL") String state,
+                                                      @RequestParam(defaultValue = "0")
+                                                      @PositiveOrZero(message = "Параметр 'from' должен быть больше 0")
+                                                      Integer from,
+                                                      @RequestParam(defaultValue = "10")
+                                                      @Positive(message = "Параметр 'size' должен быть больше 0")
+                                                      Integer size) {
         log.info("Запрос на получение списка бронирований пользователя с id = {}", userId);
-        return bookingService.getByUser(userId, state);
+        return bookingService.getByUser(userId, state, from, size);
     }
 
     @GetMapping("/owner")
     public List<BookingResponseDto> getBookingsByItemsOwner(@RequestHeader("X-Sharer-User-Id") Integer userId,
-                                                            @RequestParam(defaultValue = "ALL") String state) {
+                                                            @RequestParam(defaultValue = "ALL") String state,
+                                                            @RequestParam(defaultValue = "0")
+                                                            @PositiveOrZero(message = "Параметр 'from' должен быть больше 0")
+                                                            Integer from,
+                                                            @RequestParam(defaultValue = "10")
+                                                            @Positive(message = "Параметр 'size' должен быть больше 0")
+                                                            Integer size) {
         log.info("Запрос на получение списка бронирований вещей владельцем с id = {}", userId);
-        return bookingService.getByItemsOwner(userId, state);
+        return bookingService.getByItemsOwner(userId, state, from, size);
     }
 }

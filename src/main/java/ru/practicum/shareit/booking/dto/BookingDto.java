@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.practicum.shareit.booking.model.BookingStatus;
 import ru.practicum.shareit.validation.OnCreate;
 
 import javax.validation.constraints.FutureOrPresent;
@@ -31,6 +32,6 @@ public class BookingDto {
 
     private Integer bookerId;
 
-    private String status;
+    private BookingStatus status;
 
 }

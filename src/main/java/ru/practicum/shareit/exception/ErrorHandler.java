@@ -35,13 +35,6 @@ public class ErrorHandler {
         return new ErrorResponse("Непредвиденная ошибка.", e.getMessage());
     }
 
-    @ExceptionHandler(AlreadyExistException.class)
-    @ResponseStatus(HttpStatus.CONFLICT)
-    public ErrorResponse handleAlreadyExistException(final AlreadyExistException e) {
-        log.warn("Ошибка валидации.");
-        return new ErrorResponse("Данные уже существуют", e.getMessage());
-    }
-
     @ExceptionHandler(UnknownBookingStateException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleUnknownBookingStateException(final UnknownBookingStateException e) {

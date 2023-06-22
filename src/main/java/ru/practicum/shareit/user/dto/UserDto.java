@@ -16,7 +16,7 @@ public class UserDto {
 
     private Integer id;
 
-    @NotBlank(message = "email не должен быть пустым или null", groups = OnCreate.class)
+    @NotBlank(message = "name не должен быть пустым или null", groups = OnCreate.class)
     private String name;
 
     @NotBlank(message = "email не должен быть пустым или null", groups = OnCreate.class)

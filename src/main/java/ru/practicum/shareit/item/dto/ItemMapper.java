@@ -1,12 +1,13 @@
-package ru.practicum.shareit.item;
+package ru.practicum.shareit.item.dto;
 
 import lombok.experimental.UtilityClass;
 import ru.practicum.shareit.booking.dto.BookingDto;
-import ru.practicum.shareit.item.dto.CommentDto;
-import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.user.User;
+import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.user.model.User;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @UtilityClass
 public class ItemMapper {
@@ -17,6 +18,7 @@ public class ItemMapper {
                 .name(item.getName())
                 .description(item.getDescription())
                 .available(item.getAvailable())
+                .requestId(item.getRequestId())
                 .build();
     }
 
@@ -27,6 +29,7 @@ public class ItemMapper {
                 .description(item.getDescription())
                 .available(item.getAvailable())
                 .comments(comments)
+                .requestId(item.getRequestId())
                 .build();
     }
 
@@ -39,6 +42,7 @@ public class ItemMapper {
                 .lastBooking(last)
                 .nextBooking(next)
                 .comments(comments)
+                .requestId(item.getRequestId())
                 .build();
     }
 
@@ -49,7 +53,14 @@ public class ItemMapper {
                 .description(itemDto.getDescription())
                 .available(itemDto.getAvailable())
                 .owner(user)
+                .requestId(itemDto.getRequestId())
                 .build();
+    }
+
+    public static Set<ItemDto> toItemDtos(Set<Item> items) {
+        return items.stream()
+                .map(ItemMapper::toItemDto)
+                .collect(Collectors.toSet());
     }
 
 }

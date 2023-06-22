@@ -2,21 +2,24 @@ package ru.practicum.shareit.item.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.shareit.booking.BookingMapper;
-import ru.practicum.shareit.booking.BookingStatus;
 import ru.practicum.shareit.booking.dto.BookingDto;
+import ru.practicum.shareit.booking.dto.BookingMapper;
+import ru.practicum.shareit.booking.model.BookingStatus;
 import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.exception.NotFoundException;
-import ru.practicum.shareit.item.CommentMapper;
-import ru.practicum.shareit.item.Item;
-import ru.practicum.shareit.item.ItemMapper;
 import ru.practicum.shareit.item.dto.CommentDto;
+import ru.practicum.shareit.item.dto.CommentMapper;
 import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.dto.ItemMapper;
+import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.CommentRepository;
 import ru.practicum.shareit.item.repository.ItemRepository;
-import ru.practicum.shareit.user.User;
+import ru.practicum.shareit.request.model.ItemRequest;
+import ru.practicum.shareit.request.repository.ItemRequestRepository;
+import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 
 import java.time.LocalDateTime;
@@ -35,6 +38,7 @@ public class ItemServiceImpl implements ItemService {
     private final UserRepository userRepository;
     private final BookingRepository bookingRepository;
     private final CommentRepository commentRepository;
+    private final ItemRequestRepository itemRequestRepository;
 
     @Transactional
     @Override
@@ -45,17 +49,22 @@ public class ItemServiceImpl implements ItemService {
                 }
         );
         Item item = ItemMapper.toItem(user, itemDto);
+        if (item.getRequestId() != null) {
+            ItemRequest itemRequest = itemRequestRepository.findById(item.getRequestId()).orElseThrow(() ->
+                    new NotFoundException(String.format("Запрос с id = %d не найден", item.getRequestId())));
+        }
         return ItemMapper.toItemDto(itemRepository.save(item));
     }
 
     @Override
-    public List<ItemDto> getAllByUserId(Integer userId) {
+    public List<ItemDto> getAllByUserId(Integer userId, Integer from, Integer size) {
         userRepository.findById(userId).orElseThrow(() -> {
                     log.warn("Пользователь с id = {} не найден", userId);
                     return new NotFoundException(String.format("Пользователь с id %d не найден", userId));
                 }
         );
-        List<Item> userItems = itemRepository.findAllByOwnerId(userId);
+        PageRequest page = PageRequest.of(from / size, size);
+        List<Item> userItems = itemRepository.findAllByOwnerId(userId, page);
 
         Map<Integer, List<CommentDto>> comments = commentRepository.findByItemIn(userItems)
                 .stream()
@@ -85,7 +94,7 @@ public class ItemServiceImpl implements ItemService {
                     return new NotFoundException(String.format("Вещь с id %d не найдена", id));
                 }
         );
-        List<BookingDto> bookings = bookingRepository.findAllByItemAndStatusOrderByStartAsc(item,
+        List<BookingDto> bookings = bookingRepository.findAllByItemInAndStatusOrderByStartAsc(List.of(item),
                         BookingStatus.APPROVED)
                 .stream()
                 .map(BookingMapper::toBookingDto)
@@ -135,12 +144,12 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<ItemDto> searchItem(Integer userId, String text) {
+    public List<ItemDto> searchItem(Integer userId, String text, Integer from, Integer size) {
         if (text == null || text.isBlank()) {
             return Collections.emptyList();
         }
-
-        return itemRepository.search(text)
+        PageRequest page = PageRequest.of(from / size, size);
+        return itemRepository.search(text, page)
                 .stream()
                 .map(ItemMapper::toItemDto)
                 .collect(toList());
