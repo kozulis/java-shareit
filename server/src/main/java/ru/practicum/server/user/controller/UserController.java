@@ -2,18 +2,14 @@ package ru.practicum.server.user.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.server.user.dto.UserDto;
 import ru.practicum.server.user.service.UserService;
-import ru.practicum.server.validation.OnCreate;
-import ru.practicum.server.validation.OnUpdate;
 
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@Validated
 @Slf4j
 @RequestMapping(path = "/users")
 public class UserController {
@@ -21,7 +17,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
-    public UserDto saveNewUser(@Validated(OnCreate.class) @RequestBody UserDto userDto) {
+    public UserDto saveNewUser(@RequestBody UserDto userDto) {
         log.info("Запрос на создание нового пользователя");
         return userService.saveUser(userDto);
     }
@@ -39,8 +35,7 @@ public class UserController {
     }
 
     @PatchMapping("/{userId}")
-    public UserDto updateUser(@PathVariable("userId") int id, @Validated(OnUpdate.class)
-    @RequestBody UserDto userDto) {
+    public UserDto updateUser(@PathVariable("userId") int id, @RequestBody UserDto userDto) {
         log.info("Запрос на обновление данных пользователя c id = {}", id);
         return userService.updateUser(id, userDto);
     }

@@ -23,17 +23,20 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     @Transactional
+    @Override
     public UserDto saveUser(UserDto userDto) {
         User user = userRepository.save(UserMapper.toUser(userDto));
         return UserMapper.toUserDto(user);
     }
 
+    @Override
     public List<UserDto> getAll() {
         return userRepository.findAll().stream()
                 .map(UserMapper::toUserDto)
                 .collect(Collectors.toList());
     }
 
+    @Override
     public UserDto getById(int id) {
         User user = userRepository.findById(id).orElseThrow(() -> {
                     log.warn("Пользователь с id = {} не найден", id);
@@ -43,6 +46,7 @@ public class UserServiceImpl implements UserService {
         return UserMapper.toUserDto(user);
     }
 
+    @Override
     @Transactional
     public UserDto updateUser(int id, UserDto userDto) {
         UserDto updatedUserDto = getById(id);
@@ -55,6 +59,7 @@ public class UserServiceImpl implements UserService {
         return UserMapper.toUserDto(userRepository.save(user));
     }
 
+    @Override
     @Transactional
     public void delete(int id) {
         getById(id);
