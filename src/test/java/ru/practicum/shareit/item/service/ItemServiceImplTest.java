@@ -112,7 +112,7 @@ class ItemServiceImplTest {
     @DisplayName("Получение списка вещей пользователя")
     void getAllByUserId_returnItemList() {
         when(userRepository.findById(anyInt())).thenReturn(Optional.of(user));
-        when(itemRepository.findAllByOwnerId(anyInt(), any(Pageable.class))).thenReturn(
+        when(itemRepository.findAllByOwnerIdOrderByIdAsc(anyInt(), any(Pageable.class))).thenReturn(
                 List.of(item));
         when(commentRepository.findByItemIn(anyList())).thenReturn(List.of(comment));
         when(bookingRepository.findAllByItemInAndStatusOrderByStartAsc(anyList(), any(BookingStatus.class)))
@@ -124,7 +124,7 @@ class ItemServiceImplTest {
 
         assertEquals(actualItemDto, expectItemDto);
         verify(userRepository, times(1)).findById(anyInt());
-        verify(itemRepository, times(1)).findAllByOwnerId(anyInt(), any(Pageable.class));
+        verify(itemRepository, times(1)).findAllByOwnerIdOrderByIdAsc(anyInt(), any(Pageable.class));
         verify(commentRepository, times(1)).findByItemIn(anyList());
         verify(bookingRepository, times(1))
                 .findAllByItemInAndStatusOrderByStartAsc(anyList(), any(BookingStatus.class));
@@ -137,7 +137,7 @@ class ItemServiceImplTest {
 
         assertThrows(NotFoundException.class, () -> itemService.getAllByUserId(user.getId(), 0, 10));
         verify(userRepository, times(1)).findById(anyInt());
-        verify(itemRepository, never()).findAllByOwnerId(anyInt(), any(Pageable.class));
+        verify(itemRepository, never()).findAllByOwnerIdOrderByIdAsc(anyInt(), any(Pageable.class));
         verify(commentRepository, never()).findByItemIn(anyList());
         verify(bookingRepository, never())
                 .findAllByItemInAndStatusOrderByStartAsc(anyList(), any(BookingStatus.class));

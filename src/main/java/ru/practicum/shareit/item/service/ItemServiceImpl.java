@@ -64,7 +64,7 @@ public class ItemServiceImpl implements ItemService {
                 }
         );
         PageRequest page = PageRequest.of(from / size, size);
-        List<Item> userItems = itemRepository.findAllByOwnerId(userId, page);
+        List<Item> userItems = itemRepository.findAllByOwnerIdOrderByIdAsc(userId, page);
 
         Map<Integer, List<CommentDto>> comments = commentRepository.findByItemIn(userItems)
                 .stream()

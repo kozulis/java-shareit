@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface ItemRepository extends JpaRepository<Item, Integer> {
 
-    List<Item> findAllByOwnerId(Integer userId, Pageable pageable);
+    List<Item> findAllByOwnerIdOrderByIdAsc(Integer userId, Pageable pageable);
 
     @Query("select i " +
             "from Item as i " +

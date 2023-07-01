@@ -49,7 +49,7 @@ class JpaItemRepositoryTest {
     @DisplayName("Получение списка вещей пользователя")
     void findAllByOwnerId() {
         Integer id = owner.getId();
-        List<Item> actualItems = itemRepository.findAllByOwnerId(id, Pageable.ofSize(1));
+        List<Item> actualItems = itemRepository.findAllByOwnerIdOrderByIdAsc(id, Pageable.ofSize(1));
         assertEquals(1, actualItems.size());
         assertEquals(actualItems.get(0).getName(), "Дрель");
         assertEquals(actualItems.get(0).getDescription(), "Простая дрель");
