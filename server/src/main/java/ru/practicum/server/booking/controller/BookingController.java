@@ -2,12 +2,10 @@ package ru.practicum.server.booking.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.server.booking.dto.BookingDto;
 import ru.practicum.server.booking.dto.BookingResponseDto;
 import ru.practicum.server.booking.service.BookingService;
-import ru.practicum.server.validation.OnCreate;
 
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
@@ -17,14 +15,12 @@ import java.util.List;
 @RequestMapping(path = "/bookings")
 @RequiredArgsConstructor
 @Slf4j
-@Validated
 public class BookingController {
 
     private final BookingService bookingService;
 
     @PostMapping
     public BookingResponseDto saveNewBooking(@RequestHeader("X-Sharer-User-Id") Integer userId,
-                                             @Validated(OnCreate.class)
                                              @RequestBody BookingDto bookingDto) {
         log.info("Добавление нового запроса на бронирование");
         return bookingService.saveBooking(userId, bookingDto);

@@ -28,15 +28,19 @@ public class UserClient extends BaseClient {
     public ResponseEntity<Object> saveUser(UserDto userDto) {
         return post("", userDto);
     }
+
     public ResponseEntity<Object> getAll() {
         return get("");
     }
+
     public ResponseEntity<Object> getById(Long id) {
         return get("/" + id);
     }
+
     public ResponseEntity<Object> updateUser(Long id, UserDto userDto) {
         return patch("/" + id, userDto);
     }
+
     public ResponseEntity<Object> delete(Long id) {
         return delete("/" + id);
     }
