@@ -29,7 +29,7 @@ public class ErrorHandler {
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ErrorResponse handleThrowableException(final Throwable e) {
+    public ErrorResponse handleThrowableException(final Exception e) {
         log.error("Непредвиденная ошибка.");
         return new ErrorResponse("Непредвиденная ошибка.", e.getMessage());
     }

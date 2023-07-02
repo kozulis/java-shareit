@@ -12,6 +12,7 @@ import ru.practicum.gateway.validation.OnCreate;
 
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
+import java.util.Collections;
 
 @Controller
 @Validated
@@ -70,6 +71,9 @@ public class ItemController {
                                     @RequestParam(defaultValue = "10")
                                     @Positive(message = "Параметр 'size' должен быть больше 0")
                                     Long size) {
+        if (text == null || text.isBlank()) {
+            return ResponseEntity.ok(Collections.emptyList());
+        }
         log.info("Запрос на поиск вещи по названию или описанию, текст = \"{}\"", text);
         return itemClient.searchItem(userId, text, from, size);
     }
