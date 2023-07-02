@@ -6,8 +6,6 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.server.request.dto.ItemRequestDto;
 import ru.practicum.server.request.service.ItemRequestService;
 
-import javax.validation.constraints.Positive;
-import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
 @RestController
@@ -34,10 +32,8 @@ public class ItemRequestController {
     @GetMapping("/all")
     public List<ItemRequestDto> getAllRequests(@RequestHeader("X-Sharer-User-Id") Integer userId,
                                                @RequestParam(defaultValue = "0")
-                                               @PositiveOrZero(message = "Параметр 'from' должен быть больше 0")
                                                Integer from,
                                                @RequestParam(defaultValue = "10")
-                                               @Positive(message = "Параметр 'size' должен быть больше 0")
                                                Integer size) {
         log.info("Получение списка запросов других пользователей");
         return itemRequestService.getAllRequests(userId, from, size);

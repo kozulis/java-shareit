@@ -10,8 +10,6 @@ import ru.practicum.server.item.service.CommentService;
 import ru.practicum.server.item.service.ItemService;
 import ru.practicum.server.validation.OnCreate;
 
-import javax.validation.constraints.Positive;
-import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
 @RestController
@@ -32,10 +30,8 @@ public class ItemController {
     @GetMapping
     public List<ItemDto> getAllItemsByUserId(@RequestHeader("X-Sharer-User-Id") int userId,
                                              @RequestParam(defaultValue = "0")
-                                             @PositiveOrZero(message = "Параметр 'from' должен быть больше 0")
                                              Integer from,
                                              @RequestParam(defaultValue = "10")
-                                             @Positive(message = "Параметр 'size' должен быть больше 0")
                                              Integer size) {
         log.info("Запрос на получение списка вещей пользователя с id = {}", userId);
         return itemService.getAllByUserId(userId, from, size);
@@ -65,10 +61,8 @@ public class ItemController {
     public List<ItemDto> searchItem(@RequestHeader("X-Sharer-User-Id") int userId,
                                     @RequestParam String text,
                                     @RequestParam(defaultValue = "0")
-                                    @PositiveOrZero(message = "Параметр 'from' должен быть больше 0")
                                     Integer from,
                                     @RequestParam(defaultValue = "10")
-                                    @Positive(message = "Параметр 'size' должен быть больше 0")
                                     Integer size) {
         log.info("Запрос на поиск вещи по названию или описанию, текст = \"{}\"", text);
         return itemService.searchItem(userId, text, from, size);
